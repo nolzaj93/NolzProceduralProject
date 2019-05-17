@@ -2,8 +2,10 @@
 
 using namespace std;
 
-//Austin Nolz Procedural Project for COP 2001
-
+/**
+ * @author - Austin Nolz, Procedural Project for COP 2001
+ * @return - 0 means everything ran fine
+ */
 int main() {
     /*
      * Welcome Message and menu displayed
