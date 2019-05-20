@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ using namespace std;
 
 
 
-void printMenu();
+void showMenu();
 void produceItems();
 void addEmployeeAccount();
 void addMusicPlayer();
@@ -17,14 +18,17 @@ void addMoviePlayer();
 void displayProductionStatistics();
 
 int main() {
-    std::cout << "Production Line Tracker\n\n";
+    std::cout << "Welcome to the Production Line Tracker!\n\n";
 
     int inputNumber = 0;
     bool programIsRunning=true;
 
     while(programIsRunning) {
 
-        printMenu();
+        std::cout << "Type in a number between 1 and 6 to run the respective function.\n\n";
+
+
+        showMenu();
 
         std::cin >> inputNumber;
 
@@ -49,7 +53,9 @@ int main() {
 
 }
 
-void printMenu() {
+void showMenu() {
+
+
     std::cout << "1. Produce Items\n";
     std::cout << "2. Add Employee Account\n";
     std::cout << "3. Add Music Player\n";
@@ -59,7 +65,59 @@ void printMenu() {
 }
 
 void produceItems() {
+    int prodNum = 1;
+    int audioSerialNum = 1;
+    int audioMobileSerialNum = 1;
+    int visualSerialNum = 1;
+    int visualMobileSerialNum = 1;
+
     std::cout << "Produce Items Stub\n";
+
+    // Eventually the user will be able to choose the item to produce.
+    // For now, just have them input the information.
+    cout << "Enter the Manufacturer\n";
+    string manufacturer;
+    cin >> manufacturer;
+
+    cout << "Enter the Product Name\n";
+    string prodName;
+    cin >> prodName;
+
+    cout << "Enter the item type\n";
+    cout << "1. Audio\n" <<
+         "2. Visual\n" <<
+         "3. AudioMobile\n" <<
+         "4. VisualMobile\n";
+    int itemTypeChoice;
+    cin >> itemTypeChoice;
+    string itemTypeCode;
+
+    // write code to set the item type code based on the selected item type
+    // Audio "MM", Visual "VI", AudioMobile "AM", or VisualMobile "VM".
+    switch(itemTypeChoice) {
+        case 1: itemTypeCode = "MM";
+            break;
+        case 2: itemTypeCode = "VI";
+            break;
+        case 3: itemTypeCode = "AM";
+            break;
+        case 4: itemTypeCode = "VM";
+            break;
+        default:
+            break;
+    }
+
+    cout << "Enter the number of items that were produced\n";
+    int numProduced;
+    cin >> numProduced;
+
+    // add a loop to record production, for now simply by
+    // outputting production number and serial number
+    for(int counter = 0; counter < numProduced; counter++) {
+        cout << "Production Number: " + std::to_string(counter+1)
+                + " Serial Number: " + manufacturer.substr(0,3) + itemTypeCode;
+        cout << setfill('0') << setw(5) << std::to_string(counter+1)<< endl;
+    }
 }
 
 void addEmployeeAccount() {
