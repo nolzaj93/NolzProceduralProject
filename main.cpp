@@ -3,11 +3,11 @@
 
 using namespace std;
 
-/**
- * @author - Austin Nolz, Procedural Project for COP 2001
- * @return - 0 means everything ran fine
+/** @file main.cpp
+ *  @brief This file is C++ source code for the Procedural Project.
+ *
+ *  @author Austin Nolz
  */
-
 
 
 void showMenu();
