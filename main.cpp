@@ -1,51 +1,61 @@
 #include <iostream>
 #include <iomanip>
+#include <fstream>
+#include <sstream>
+#include "mainPrototypes.h"
 
-using namespace std;
 
 /** @file main.cpp
  *  @brief This file is C++ source code for the Procedural Project.
  *
  *  @author Austin Nolz
+ *  @bug - No known bugs currently.
  */
 
-
-void showMenu();
-void produceItems();
-void addEmployeeAccount();
-void addMusicPlayer();
-void addMoviePlayer();
-void displayProductionStatistics();
-
+/**
+ * @brief This is the main function which is the starting point of the program.
+ * @return - If the program runs to completion then this function returns zero.
+ */
 int main() {
-    std::cout << "Welcome to the Production Line Tracker!\n\n";
 
+    //Welcome message printed to the console.
+    std::cout << "Welcome to the Production Line Tracker!\n";
+
+    //Declare and initialize inputNumber which is used to hold number input by user.
     int inputNumber = 0;
-    bool programIsRunning=true;
 
-    while(programIsRunning) {
+    //Declare and initialize programIsRunning as a flag bool for the while loop.
+    bool programIsRunning = true;
 
-        std::cout << "Type in a number between 1 and 6 to run the respective function.\n\n";
+    //While loop that is repeated until the user enters 6 to exit which sets programIsRunning to false.
+    while (programIsRunning) {
 
+        //Prompts the user to enter a number between 1 and 5
+        std::cout << "\n" << "Type in a number between 1 and 5 to run the respective function and press enter.\n\n";
 
         showMenu();
 
         std::cin >> inputNumber;
 
+        //Switch statement calls the corresponding function, or if the the user enters 6 the loop is broken.
         switch (inputNumber) {
-            case 1: produceItems();
+            case 1:
+                produceItems();
                 break;
-            case 2: addEmployeeAccount();
+            case 2:
+                addEmployeeAccount();
                 break;
-            case 3: addMusicPlayer();
+            case 3:
+                addNewProduct();
                 break;
-            case 4: addMoviePlayer();
+            case 4:
+                displayProductionStatistics();
                 break;
-            case 5: displayProductionStatistics();
+            case 5:
+                programIsRunning = false;
                 break;
-            case 6: programIsRunning = false;
-                break;
-            default: std::cout << "Not a valid selection\n";
+            default:
+                std::cout << "Your input was invalid. Please try again.\n";
                 break;
         }
     }
@@ -55,69 +65,197 @@ int main() {
 
 void showMenu() {
 
-
+    //prints the menu to the console
     std::cout << "1. Produce Items\n";
     std::cout << "2. Add Employee Account\n";
-    std::cout << "3. Add Music Player\n";
-    std::cout << "4. Add Movie Player\n";
-    std::cout << "5. Display Production Statistics\n";
-    std::cout << "6. Exit\n";
+    std::cout << "3. Add New Product\n";
+    std::cout << "4. Display Production Statistics\n";
+    std::cout << "5. Exit\n";
 }
 
-void produceItems() {
-    int prodNum = 1;
-    int audioSerialNum = 1;
-    int audioMobileSerialNum = 1;
-    int visualSerialNum = 1;
-    int visualMobileSerialNum = 1;
+void showCatalog() {
 
-    std::cout << "Produce Items Stub\n";
+    //Existing products are printed from catalog.txt if the file exists already
+    std::string nextLine;
+    std::ifstream currentCatalogFile("catalog.txt");
 
-    // Eventually the user will be able to choose the item to produce.
-    // For now, just have them input the information.
-    cout << "Enter the Manufacturer\n";
-    string manufacturer;
-    cin >> manufacturer;
+    if (currentCatalogFile.is_open()) {
+        std::cout << '\n' << "Existing products: " << '\n';
 
-    cout << "Enter the Product Name\n";
-    string prodName;
-    cin >> prodName;
+        while (getline(currentCatalogFile, nextLine)) {
+            std::cout << nextLine << '\n';
+        }
+        currentCatalogFile.close();
+    } else std::cout << "The product catalog is empty.\n";
+}
 
-    cout << "Enter the item type\n";
-    cout << "1. Audio\n" <<
-         "2. Visual\n" <<
-         "3. AudioMobile\n" <<
-         "4. VisualMobile\n";
+void addNewProduct() {
+
+    showCatalog();
+
+    std::cout << "\n" << "Enter the Manufacturer" << std::endl;
+    std::string manufacturer;
+    std::cin >> manufacturer;
+
+    //Ignores the newline character read when the user presses enter/return.
+    std::cin.ignore();
+
+    std::string prodName;
+    std::cout << "Enter the Product Name" << std::endl;
+    std::getline(std::cin, prodName);
+
+
+    std::cout << "Enter the item type\n";
+    std::cout << "1. Audio\n" <<
+              "2. Visual\n" <<
+              "3. AudioMobile\n" <<
+              "4. VisualMobile\n";
     int itemTypeChoice;
-    cin >> itemTypeChoice;
-    string itemTypeCode;
+    std::cin >> itemTypeChoice;
+    std::string itemTypeCode;
 
     // write code to set the item type code based on the selected item type
     // Audio "MM", Visual "VI", AudioMobile "AM", or VisualMobile "VM".
-    switch(itemTypeChoice) {
-        case 1: itemTypeCode = "MM";
+    switch (itemTypeChoice) {
+        case 1:
+            itemTypeCode = "Audio";
             break;
-        case 2: itemTypeCode = "VI";
+        case 2:
+            itemTypeCode = "Visual";
             break;
-        case 3: itemTypeCode = "AM";
+        case 3:
+            itemTypeCode = "AudioMobile";
             break;
-        case 4: itemTypeCode = "VM";
+        case 4:
+            itemTypeCode = "VisualMobile";
             break;
         default:
             break;
     }
 
-    cout << "Enter the number of items that were produced\n";
+    std::string newProduct = manufacturer + " " + prodName + " " + itemTypeCode;
+
+    std::ofstream catalogFile;
+    catalogFile.open("catalog.txt", std::ios::app);
+    catalogFile << newProduct << std::endl;
+    catalogFile.close();
+
+    std::cout << newProduct << " has been added to the product catalog.\n" << std::endl;
+
+
+}
+
+void produceItems() {
+
+    static int productionNumber;
+    static int audioSerialNum;
+    static int audioMobileSerialNum;
+    static int visualSerialNum;
+    static int visualMobileSerialNum;
+
+    std::string line;
+    std::ifstream itemNumbers("itemNumbers.txt");
+    if (itemNumbers.is_open()) {
+
+        itemNumbers >> productionNumber >> audioSerialNum >> audioMobileSerialNum >> visualSerialNum
+                    >> visualMobileSerialNum;
+        itemNumbers.close();
+    } else {
+        productionNumber = 1;
+        audioSerialNum = 1;
+        audioMobileSerialNum = 1;
+        visualSerialNum = 1;
+        visualMobileSerialNum = 1;
+    }
+
+
+    showCatalog();
+
+    // Eventually the user will be able to choose the item to produce.
+    std::cout << "\n" << "Enter the Manufacturer\n";
+    std::string manufacturer;
+    std::cin >> manufacturer;
+
+    //Ignores the newline character read when the user presses enter/return.
+    std::cin.ignore();
+
+    std::cout << "Enter the Product Name\n";
+    std::string prodName;
+    std::getline(std::cin, prodName);
+
+    std::cout << "Enter the item type\n";
+    std::cout << "1. Audio\n" <<
+              "2. Visual\n" <<
+              "3. AudioMobile\n" <<
+              "4. VisualMobile\n";
+
+    int itemTypeChoice;
+    std::cin >> itemTypeChoice;
+    std::string itemType;
+    std::string itemTypeCode;
+
+    // write code to set the item type code based on the selected item type
+    // Audio "MM", Visual "VI", AudioMobile "AM", or VisualMobile "VM".
+    switch (itemTypeChoice) {
+        case 1:
+            itemType = "Audio";
+            itemTypeCode = "MM";
+            break;
+        case 2:
+            itemType = "Visual";
+            itemTypeCode = "VI";
+            break;
+        case 3:
+            itemType = "AudioMobile";
+            itemTypeCode = "AM";
+            break;
+        case 4:
+            itemType = "VisualMobile";
+            itemTypeCode = "VM";
+            break;
+        default:
+            break;
+    }
+
+    std::cout << "Enter the number of items that were produced\n";
     int numProduced;
-    cin >> numProduced;
+    std::cin >> numProduced;
+
+    std::ofstream productionFile;
+    productionFile.open("production.txt", std::ios::app);
+
 
     // add a loop to record production, for now simply by
     // outputting production number and serial number
-    for(int counter = 0; counter < numProduced; counter++) {
-        cout << "Production Number: " + std::to_string(counter+1)
-                + " Serial Number: " + manufacturer.substr(0,3) + itemTypeCode;
-        cout << setfill('0') << setw(5) << std::to_string(counter+1)<< endl;
+    for (int counter = 0; counter < numProduced; counter++) {
+
+        std::ostringstream productInfo;
+        productInfo << "Manufacturer: " << manufacturer << " Product Name: " << prodName
+                    << " Item Type: " << itemType << " Production Number: " << std::to_string(productionNumber++)
+                    << " Serial Number: " << manufacturer.substr(0, 3) << itemTypeCode;
+
+        if (itemTypeCode == "MM")
+            productInfo << std::setfill('0') << std::setw(5) << std::to_string(audioSerialNum++);
+        else if (itemTypeCode == "VI")
+            productInfo << std::setfill('0') << std::setw(5) << std::to_string(audioMobileSerialNum++);
+        else if (itemTypeCode == "AM")
+            productInfo << std::setfill('0') << std::setw(5) << std::to_string(visualSerialNum++);
+        else
+            productInfo << std::setfill('0') << std::setw(5) << std::to_string(visualMobileSerialNum++);
+
+        std::string prodAndSerialString = productInfo.str();
+        std::cout << prodAndSerialString << std::endl;
+        productionFile << prodAndSerialString << std::endl;
+
     }
+    productionFile.close();
+
+
+    std::ofstream itemNumbersOut;
+    itemNumbersOut.open("itemNumbers.txt");
+    itemNumbersOut << productionNumber << " " << audioSerialNum << " " << audioMobileSerialNum << " " << visualSerialNum
+                   << " " << visualMobileSerialNum;
+    itemNumbersOut.close();
 }
 
 void addEmployeeAccount() {
@@ -125,10 +263,14 @@ void addEmployeeAccount() {
 }
 
 void addMusicPlayer() {
+
+    //Adds Audio or AudioMobile player
     std::cout << "Add Music Player Stub\n";
 }
 
 void addMoviePlayer() {
+
+    //Adds Visual or VisualMobile player
     std::cout << "Add Movie Player Stub\n";
 }
 
