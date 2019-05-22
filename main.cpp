@@ -1,16 +1,15 @@
+/** @file main.cpp
+ *  @brief This file is C++ source code for the COP2001 Procedural Project.
+ *
+ *  @author Austin Nolz
+ *  @bug - No known bugs currently.
+ */
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include "mainPrototypes.h"
-
-
-/** @file main.cpp
- *  @brief This file is C++ source code for the Procedural Project.
- *
- *  @author Austin Nolz
- *  @bug - No known bugs currently.
- */
 
 /**
  * @brief This is the main function which is the starting point of the program.
@@ -22,7 +21,7 @@ int main() {
     std::cout << "Welcome to the Production Line Tracker!\n";
 
     //Declare and initialize inputNumber which is used to hold number input by user.
-    int inputNumber = 0;
+    char inputNumber = '0';
 
     //Declare and initialize programIsRunning as a flag bool for the while loop.
     bool programIsRunning = true;
@@ -39,19 +38,19 @@ int main() {
 
         //Switch statement calls the corresponding function, or if the the user enters 6 the loop is broken.
         switch (inputNumber) {
-            case 1:
+            case '1':
                 produceItems();
                 break;
-            case 2:
+            case '2':
                 addEmployeeAccount();
                 break;
-            case 3:
+            case '3':
                 addNewProduct();
                 break;
-            case 4:
+            case '4':
                 displayProductionStatistics();
                 break;
-            case 5:
+            case '5':
                 programIsRunning = false;
                 break;
             default:
@@ -60,7 +59,6 @@ int main() {
         }
     }
     return 0;
-
 }
 
 void showMenu() {
@@ -79,8 +77,9 @@ void showCatalog() {
     std::string nextLine;
     std::ifstream currentCatalogFile("catalog.txt");
 
+    //If catalog.txt exists then existing products are printed, otherwise it is printed that the catalog is empty.
     if (currentCatalogFile.is_open()) {
-        std::cout << '\n' << "Existing products: " << '\n';
+        std::cout << '\n' << "Current catalog: " << '\n';
 
         while (getline(currentCatalogFile, nextLine)) {
             std::cout << nextLine << '\n';
@@ -104,7 +103,6 @@ void addNewProduct() {
     std::cout << "Enter the Product Name" << std::endl;
     std::getline(std::cin, prodName);
 
-
     std::cout << "Enter the item type\n";
     std::cout << "1. Audio\n" <<
               "2. Visual\n" <<
@@ -112,62 +110,62 @@ void addNewProduct() {
               "4. VisualMobile\n";
     int itemTypeChoice;
     std::cin >> itemTypeChoice;
-    std::string itemTypeCode;
+    std::string itemType;
 
-    // write code to set the item type code based on the selected item type
-    // Audio "MM", Visual "VI", AudioMobile "AM", or VisualMobile "VM".
+    // itemType is set depending on itemTypeChoice
     switch (itemTypeChoice) {
         case 1:
-            itemTypeCode = "Audio";
+            itemType = "Audio";
             break;
         case 2:
-            itemTypeCode = "Visual";
+            itemType = "Visual";
             break;
         case 3:
-            itemTypeCode = "AudioMobile";
+            itemType = "AudioMobile";
             break;
         case 4:
-            itemTypeCode = "VisualMobile";
+            itemType = "VisualMobile";
             break;
         default:
             break;
     }
 
-    std::string newProduct = manufacturer + " " + prodName + " " + itemTypeCode;
+    //newProduct string is set by concatenating manufacturer prodName itemType
+    std::string newProduct = manufacturer + " " + prodName + " " + itemType;
 
+    //newProduct string is appended to catalog.txt file
     std::ofstream catalogFile;
     catalogFile.open("catalog.txt", std::ios::app);
     catalogFile << newProduct << std::endl;
     catalogFile.close();
 
     std::cout << newProduct << " has been added to the product catalog.\n" << std::endl;
-
-
 }
 
 void produceItems() {
 
+    //Production and serial numbers are declared.
     static int productionNumber;
     static int audioSerialNum;
     static int audioMobileSerialNum;
     static int visualSerialNum;
     static int visualMobileSerialNum;
 
-    std::string line;
-    std::ifstream itemNumbers("itemNumbers.txt");
+    std::fstream itemNumbers("itemNumbers.txt");
     if (itemNumbers.is_open()) {
-
+        // Production and serial numbers are written to a file
         itemNumbers >> productionNumber >> audioSerialNum >> audioMobileSerialNum >> visualSerialNum
                     >> visualMobileSerialNum;
         itemNumbers.close();
     } else {
+
+        // Production and serial numbers are set to 1 if itemNumbers.txt does not exist.
         productionNumber = 1;
         audioSerialNum = 1;
         audioMobileSerialNum = 1;
         visualSerialNum = 1;
         visualMobileSerialNum = 1;
     }
-
 
     showCatalog();
 
@@ -176,12 +174,12 @@ void produceItems() {
     std::string manufacturer;
     std::cin >> manufacturer;
 
-    //Ignores the newline character read when the user presses enter/return.
-    std::cin.ignore();
-
     std::cout << "Enter the Product Name\n";
     std::string prodName;
     std::getline(std::cin, prodName);
+
+    //Ignores the newline character read when the user presses enter/return.
+    std::cin.ignore();
 
     std::cout << "Enter the item type\n";
     std::cout << "1. Audio\n" <<
@@ -194,7 +192,6 @@ void produceItems() {
     std::string itemType;
     std::string itemTypeCode;
 
-    // write code to set the item type code based on the selected item type
     // Audio "MM", Visual "VI", AudioMobile "AM", or VisualMobile "VM".
     switch (itemTypeChoice) {
         case 1:
@@ -221,6 +218,7 @@ void produceItems() {
     int numProduced;
     std::cin >> numProduced;
 
+    // Declares productionFile object and opens production.txt
     std::ofstream productionFile;
     productionFile.open("production.txt", std::ios::app);
 
@@ -229,11 +227,13 @@ void produceItems() {
     // outputting production number and serial number
     for (int counter = 0; counter < numProduced; counter++) {
 
+        //productInfo output string stream holds all product information to be written to production.txt
         std::ostringstream productInfo;
         productInfo << "Manufacturer: " << manufacturer << " Product Name: " << prodName
                     << " Item Type: " << itemType << " Production Number: " << std::to_string(productionNumber++)
                     << " Serial Number: " << manufacturer.substr(0, 3) << itemTypeCode;
 
+        //Adds respective serial number to the productInfo ostringstream object
         if (itemTypeCode == "MM")
             productInfo << std::setfill('0') << std::setw(5) << std::to_string(audioSerialNum++);
         else if (itemTypeCode == "VI")
@@ -243,19 +243,21 @@ void produceItems() {
         else
             productInfo << std::setfill('0') << std::setw(5) << std::to_string(visualMobileSerialNum++);
 
-        std::string prodAndSerialString = productInfo.str();
-        std::cout << prodAndSerialString << std::endl;
-        productionFile << prodAndSerialString << std::endl;
-
+        //Outputs a string from the productInfo object on each iteration, and writes it to production.txt
+        std::cout << productInfo.str() << std::endl;
+        productionFile << productInfo.str() << std::endl;
     }
     productionFile.close();
 
-
+    //itemNumbersOut object created and itemNumbers.txt is opened if it exists, else a new text file is created.
     std::ofstream itemNumbersOut;
     itemNumbersOut.open("itemNumbers.txt");
+
+    //Writes the production and serial numbers to the itemNumbers.txt file.
     itemNumbersOut << productionNumber << " " << audioSerialNum << " " << audioMobileSerialNum << " " << visualSerialNum
                    << " " << visualMobileSerialNum;
     itemNumbersOut.close();
+
 }
 
 void addEmployeeAccount() {

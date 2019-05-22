@@ -13,36 +13,37 @@
 void showMenu();
 
 /**
- * @brief
+ * @brief Prints the catalog to the console, and prints that the catalog is empty if no products have been added.
  */
 void showCatalog();
 
 /**
- * @brief
+ * @brief Allows the user to add a new product to the catalog by writing to the catalog.txt file.
  */
 void addNewProduct();
 
 /**
- * @brief
+ * @brief Allows the user to track the production of each product within the catalog by writing to the production.txt
+ *        file
  */
 void produceItems();
 
 /**
- * @brief
+ * @brief Allows an administrator to add an employee account.
  */
 void addEmployeeAccount();
 
 /**
- * @brief
+ * @brief This function adds a music player to the catalog.
  */
 void addMusicPlayer();
 
 /**
- * @brief
+ * @brief This function adds a movie player to the catalog.
  */
 void addMoviePlayer();
 
 /**
- * @brief
+ * @brief Displays productions statistics to the user.
  */
 void displayProductionStatistics();
