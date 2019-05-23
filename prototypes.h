@@ -59,4 +59,4 @@ void displayProductionStatistics();
  * @param 1st parameter is named variable, which is a reference variable to the corresponding required input
  * @param 2nd parameter is named varName, which is a string literal referring to the variable's name.
  */
-void returnConfirmedInput(std::string&, const std::string);
+void returnConfirmedInput(std::string &, const std::string);
