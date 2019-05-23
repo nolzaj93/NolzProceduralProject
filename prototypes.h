@@ -53,10 +53,3 @@ std::string addMoviePlayer();
  * @brief Displays productions statistics to the user.
  */
 void displayProductionStatistics();
-
-/**
- * @brief Takes the reference variable as 1st argument, variable name as 2nd argument, and confirms the user's input.
- * @param 1st parameter is named variable, which is a reference variable to the corresponding required input
- * @param 2nd parameter is named varName, which is a string literal referring to the variable's name.
- */
-void returnConfirmedInput(std::string &, const std::string);

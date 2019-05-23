@@ -115,18 +115,45 @@ void produceItems() {
 
     showCatalog();
 
-    // Eventually the user will be able to choose the item to produce.
     std::string manufacturer;
-    returnConfirmedInput(manufacturer, "manufacturer");
+    std::string entryIsCorrect;
+
+    do {
+        //Ignores the newline character read when the user presses enter/return.
+        std::cin.ignore();
+
+        std::cout << "\n" << "Please enter the manufacturer." << std::endl;
+        std::getline(std::cin, manufacturer);
+
+        //Allows the user to confirm their choice. Loop continues if entryIsCorrect is assigned 0 (false)
+        std::cout << "You entered " + manufacturer + ". If this is incorrect enter 0 to try again, or enter any other\n"
+                                                     "letter or word to continue." << std::endl;
+        std::cin >> entryIsCorrect;
+
+    } while (entryIsCorrect == "0");
 
     std::string prodName;
-    returnConfirmedInput(prodName, "product name");
+    do {
+        //Ignores the newline character read when the user presses enter/return.
+        std::cin.ignore();
 
-    std::string entryIsCorrect;
+        std::cout << "\n" << "Please enter the product name." << std::endl;
+        std::getline(std::cin, prodName);
+
+        //Allows the user to confirm their choice. Loop continues if entryIsCorrect is assigned 0 (false)
+        std::cout << "You entered " + prodName + ". If this is incorrect enter 0 to try again, or enter any other\n"
+                                                 "letter or word to continue." << std::endl;
+        std::cin >> entryIsCorrect;
+
+    } while (entryIsCorrect == "0");
+
+    //Variables declared to accept input for itemType, itemTypeCode, and itemTypeChoice
     char itemTypeChoice;
     std::string itemType;
     std::string itemTypeCode;
 
+    //Iterates at least once, and the loop will repeat if the user enters zero when prompted to confirm the input
+    // or if the user does not enter a number 1-4.
     do {
         std::cout << "Please enter the item type\n";
         std::cout << "1. Audio\n" <<
@@ -218,12 +245,37 @@ void addNewProduct() {
     //prints the current catalog or let's the user know if it is empty.
     showCatalog();
 
+    std::string entryIsCorrect;
     std::string manufacturer;
 
-    returnConfirmedInput(manufacturer, "manufacturer");
+    do {
+        //Ignores the newline character read when the user presses enter/return.
+        std::cin.ignore();
+
+        std::cout << "\n" << "Please enter the manufacturer." << std::endl;
+        std::getline(std::cin, manufacturer);
+
+        //Allows the user to confirm their choice. Loop continues if entryIsCorrect is assigned 0 (false)
+        std::cout << "You entered " + manufacturer + ". If this is incorrect enter 0 to try again, or enter any other\n"
+                                                 "letter or word to continue." << std::endl;
+        std::cin >> entryIsCorrect;
+
+    } while (entryIsCorrect == "0");
 
     std::string prodName;
-    returnConfirmedInput(prodName, "product name");
+    do {
+        //Ignores the newline character read when the user presses enter/return.
+        std::cin.ignore();
+
+        std::cout << "\n" << "Please enter the product name." << std::endl;
+        std::getline(std::cin, prodName);
+
+        //Allows the user to confirm their choice. Loop continues if entryIsCorrect is assigned 0 (false)
+        std::cout << "You entered " + prodName + ". If this is incorrect enter 0 to try again, or enter any other\n"
+                                                 "letter or word to continue." << std::endl;
+        std::cin >> entryIsCorrect;
+
+    } while (entryIsCorrect == "0");
 
     std::cout << "Please enter the item type\n";
     std::cout << "1. Audio\n" <<
@@ -237,7 +289,6 @@ void addNewProduct() {
     std::string productSpecs;
     // itemType is set depending on itemTypeChoice
 
-    std::string entryIsCorrect;
     //Sets itemType and productSpecs with a call to either addMusicPlayer or addMoviePlayer. Loop runs until they
     // confirm the input by entering 1 which sets the bool entryIsCorrect to true.
     do {
@@ -389,21 +440,4 @@ std::string addMoviePlayer() {
 
 void displayProductionStatistics() {
     std::cout << "Display Production Statistics Stub\n";
-}
-
-void returnConfirmedInput(std::string &variable, const std::string variableName) {
-    std::string entryIsCorrect;
-    do {
-        //Ignores the newline character read when the user presses enter/return.
-        std::cin.ignore();
-
-        std::cout << "\n" << "Please enter the " + variableName + "." << std::endl;
-        std::getline(std::cin, variable);
-
-        //Allows the user to confirm their choice. Loop continues if entryIsCorrect is assigned 0 (false)
-        std::cout << "You entered " + variable + ". If this is incorrect enter 0 to try again, or enter any other\n"
-                                                 "letter or word to continue." << std::endl;
-        std::cin >> entryIsCorrect;
-
-    } while (entryIsCorrect == "0");
 }
