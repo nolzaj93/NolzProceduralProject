@@ -18,13 +18,13 @@ void showMenu();
 /**
  * @brief Prints the catalog to the console, and prints that the catalog is empty if no products have been added.
  */
-void showCatalog();
+void showCatalog(std::vector <std::string>&);
 
 /**
  * @brief Allows the user to track the production of each product within the catalog by writing to the production.txt
  *        file.
  */
-void produceItems();
+void produceItems(std::vector <std::string>&, std::vector<std::string>&, std::vector<std::string>&);
 
 /**
  * @brief Allows an administrator to add an employee account.
@@ -34,7 +34,7 @@ void addEmployeeAccount();
 /**
  * @brief Allows the user to add a new product to the catalog by writing to the catalog.txt file.
  */
-void addNewProduct();
+void addNewProduct(std::vector <std::string>&);
 
 /**
  * @brief This function adds a music player to the catalog.
@@ -53,3 +53,8 @@ std::string addMoviePlayer();
  * @brief Displays productions statistics to the user.
  */
 void displayProductionStatistics();
+
+/**
+ * @brief User inputs a serial number and the respective production number is output.
+ */
+void findProductionNumber(std::vector<std::string> serialNumbers);
