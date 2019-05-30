@@ -10,7 +10,7 @@
 
 ### 1. Only accept values that are listed in the menu
 ### 2. If the user selects a different value, they are asked to choose again
-### 3. Menu is printed from a showMenu function
+### 3. Menu is printed from a run_program function
 ### 4. Menu choices result in calls to functions
 ### 5. After output of menu choice, show menu again
 ### 6. Add new products that are able to be produced:
