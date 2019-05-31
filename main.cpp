@@ -149,6 +149,7 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
 
     //If production.txt exists then these records are added line by line to the production_records vector.
     if (production_file_read.is_open()) {
+        production_number = production_records.size() + 1;
 
         //Increments the respective serial_num depending on the item type code found within each record.
         while (getline(production_file_read, next_line)) {
@@ -241,11 +242,11 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
         else if (item_type_code == "VM")
             serial_num << std::setfill('0') << std::setw(5) << std::to_string(visual_mobile_serial_num++);
 
-        product_info << serial_num.str() << std::endl;
+        product_info << serial_num.str();
 
         //Outputs a string from the product_info object on each iteration, and writes it to production.txt
         production_records.push_back(product_info.str());
-        production_file_write << production_records[production_records.size() - 1];
+        production_file_write << production_records[production_records.size() - 1] << std::endl;
     }
     production_file_write.close();
     std::cout << "Production record has been saved to file." << std::endl;
@@ -477,7 +478,6 @@ void find_production_number(std::vector<std::string> production_records) {
         std::string record;
 
         for (int count = 0; count < production_records.size(); count++) {
-
             record = production_records[count];
 
             if (record.substr(record.length() - 10, 10) == input_serial_num) {
