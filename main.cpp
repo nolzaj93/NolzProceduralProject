@@ -137,27 +137,48 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
     std::cin.ignore();
 
     //Production and serial numbers are declared.
-    static int production_number = 1;
-    static int audio_serial_num = 1;
-    static int audio_mobile_serial_num = 1;
-    static int visual_serial_num = 1;
-    static int visual_mobile_serial_num = 1;
+    int production_number = 1;
+    int audio_serial_num = 1;
+    int audio_mobile_serial_num = 1;
+    int visual_serial_num = 1;
+    int visual_mobile_serial_num = 1;
 
-    if (!production_records.empty()) {
-        production_number = production_records.size() + 1;
+    std::ifstream production_file_read("production.txt");
+    std::string next_line;
 
-        for (const std::string &record : production_records) {
+    //If production.txt exists then these records are added line by line to the production_records vector.
+    if (production_file_read.is_open()) {
 
-            if (record.substr(record.length() - 7, 2) == "MM")
+        //Adds each line to the product catalog vector.
+        while (getline(production_file_read, next_line)) {
+            if (next_line.substr(next_line.length() - 7, 2) == "MM")
                 audio_serial_num += 1;
-            else if (record.substr(record.length() - 7, 2) == "AM")
+            else if (next_line.substr(next_line.length() - 7, 2) == "AM")
                 audio_mobile_serial_num += 1;
-            else if (record.substr(record.length() - 7, 2) == "VI")
+            else if (next_line.substr(next_line.length() - 7, 2) == "VI")
                 visual_serial_num += 1;
-            else
+            else if (next_line.substr(next_line.length() - 7, 2) == "VM")
                 visual_mobile_serial_num += 1;
         }
     }
+    production_file_read.close();
+
+//    if (!production_records.empty()) {
+//
+//        production_number = production_records.size() + 1;
+//
+//        for (const std::string &record : production_records) {
+//
+//            if (record.substr(record.length() - 7, 2) == "MM")
+//                audio_serial_num += 1;
+//            else if (record.substr(record.length() - 7, 2) == "AM")
+//                audio_mobile_serial_num += 1;
+//            else if (record.substr(record.length() - 7, 2) == "VI")
+//                visual_serial_num += 1;
+//            else if (record.substr(record.length() - 7, 2) == "VM")
+//                visual_mobile_serial_num += 1;
+//        }
+//    }
 
     std::string entry_is_correct = "0";
     std::string product_choice;
@@ -177,7 +198,7 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
             choice_number = std::stoi(product_choice);
 
             //If choice_number is not within the correct range a general exception is thrown.
-            if (choice_number < 0 || choice_number > products.size())
+            if (choice_number < 1 || choice_number > products.size())
                 throw std::exception();
 
 
@@ -205,8 +226,8 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
     } while (entry_is_correct == "0");
 
     // Declares production_file object and opens production.txt
-    std::ofstream production_file;
-    production_file.open("production.txt", std::ios::app);
+    std::ofstream production_file_write;
+    production_file_write.open("production.txt", std::ios::app);
 
     //Assigns respective substrings from the product_choice to construct the serial number string.
     std::string item_type_code = product_choice.substr((product_choice.length() - 2), 2);
@@ -233,16 +254,16 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
             serial_num << std::setfill('0') << std::setw(5) << std::to_string(audio_mobile_serial_num++);
         else if (item_type_code == "VI")
             serial_num << std::setfill('0') << std::setw(5) << std::to_string(visual_serial_num++);
-        else
+        else if (item_type_code == "VM")
             serial_num << std::setfill('0') << std::setw(5) << std::to_string(visual_mobile_serial_num++);
 
         product_info << serial_num.str() << std::endl;
 
         //Outputs a string from the product_info object on each iteration, and writes it to production.txt
         production_records.push_back(product_info.str());
-        production_file << production_records[production_records.size() - 1];
+        production_file_write << production_records[production_records.size() - 1];
     }
-    production_file.close();
+    production_file_write.close();
     std::cout << "Production record has been saved to file." << std::endl;
 
 }
