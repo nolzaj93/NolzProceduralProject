@@ -143,13 +143,14 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
     int visual_serial_num = 1;
     int visual_mobile_serial_num = 1;
 
+    //Declares production_file_read ifstream object to set serial numbers depending on frequency of item type codes.
     std::ifstream production_file_read("production.txt");
     std::string next_line;
 
     //If production.txt exists then these records are added line by line to the production_records vector.
     if (production_file_read.is_open()) {
 
-        //Adds each line to the product catalog vector.
+        //Increments the respective serial_num depending on the item type code found within each record.
         while (getline(production_file_read, next_line)) {
             if (next_line.substr(next_line.length() - 7, 2) == "MM")
                 audio_serial_num += 1;
@@ -162,23 +163,6 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
         }
     }
     production_file_read.close();
-
-//    if (!production_records.empty()) {
-//
-//        production_number = production_records.size() + 1;
-//
-//        for (const std::string &record : production_records) {
-//
-//            if (record.substr(record.length() - 7, 2) == "MM")
-//                audio_serial_num += 1;
-//            else if (record.substr(record.length() - 7, 2) == "AM")
-//                audio_mobile_serial_num += 1;
-//            else if (record.substr(record.length() - 7, 2) == "VI")
-//                visual_serial_num += 1;
-//            else if (record.substr(record.length() - 7, 2) == "VM")
-//                visual_mobile_serial_num += 1;
-//        }
-//    }
 
     std::string entry_is_correct = "0";
     std::string product_choice;
@@ -225,7 +209,7 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
 
     } while (entry_is_correct == "0");
 
-    // Declares production_file object and opens production.txt
+    // Declares production_file_write object and opens production.txt. New text is appended.
     std::ofstream production_file_write;
     production_file_write.open("production.txt", std::ios::app);
 
