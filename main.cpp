@@ -25,7 +25,7 @@ int main() {
 
 void run_program() {
 
-    std::vector<std::string> products;
+    std::vector <std::string> products;
 
     //Existing products are added to vector named products from catalog.txt if the file exists already
     std::string next_line;
