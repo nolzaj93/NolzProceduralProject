@@ -13,19 +13,44 @@
 #include "prototypes.h"
 
 /**
- * @brief This is the main function which is the starting point of the program.
- * @return - If the program runs to completion then this function returns zero.
- */
+* @brief This is the main function which is the starting point of the program. It prints the menu to the console and
+*        allows the user to enter a number which will run a respective function.
+*
+* The products and production_records vectors are initialized here. If catalog.txt already exists then all products
+* are added to the products vector, then if production.txt exists then all of the production records are added to
+* the production_records vector. The function prompt_menu_choice is called and a welcome message is printed, then
+* a while loop runs, which prints the menu and prompts the user to enter the number next to the respective function
+* they wish to call. Exception handling is used to ensure that a valid integer is entered.
+*
+* @return - If the program runs to completion then this function returns zero.
+*/
 int main() {
 
-    run_program();
+    //Vector to hold the products within the product catalog added from catalog.txt.
+    std::vector<std::string> products;
 
+    //Vector to hold the production_records is declared and production.txt is opened if it exists.
+    std::vector<std::string> production_records;
+
+    //Loads existing products and production records if the respective text files exist.
+    load_existing_data(products, production_records);
+
+    //Welcome message printed to the console.
+    std::cout << "Welcome to the Production Line Tracker!\n";
+
+    //Declare and initialize program_is_running as a flag bool for the while loop.
+    bool program_is_running = true;
+
+    //While loop that is repeated until the user enters 6 to exit which sets program_is_running to false.
+    while (program_is_running) {
+
+        //The loop calls prompt_menu_choice until the function returns false, which only occurs when the user enters 6.
+        program_is_running = prompt_menu_choice(products, production_records);
+    }
     return 0;
 }
 
-void run_program() {
-
-    std::vector <std::string> products;
+void load_existing_data(std::vector<std::string> &products, std::vector<std::string> &production_records) {
 
     //Existing products are added to vector named products from catalog.txt if the file exists already
     std::string next_line;
@@ -41,8 +66,6 @@ void run_program() {
     }
     current_catalog_file.close();
 
-    //Vector to hold the production_records is declared and production.txt is opened if it exists.
-    std::vector<std::string> production_records;
     std::ifstream production_file("production.txt");
 
     //If production.txt exists then these records are added line by line to the production_records vector.
@@ -54,66 +77,59 @@ void run_program() {
         }
     }
     production_file.close();
+}
 
-    //Welcome message printed to the console.
-    std::cout << "Welcome to the Production Line Tracker!\n";
+bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::string> &production_records) {
 
     //Declare and initialize input_number which is used to hold number input by user.
     std::string input_text;
     int input_number = 0;
 
-    //Declare and initialize program_is_running as a flag bool for the while loop.
-    bool program_is_running = true;
+    //Prompts the user to enter a number between 1 and 5
+    std::cout << "\n" << "Type in a number between 1 and 5 to run the respective function and press enter.\n"
+              << std::endl;
 
-    //While loop that is repeated until the user enters 6 to exit which sets program_is_running to false.
-    while (program_is_running) {
+    //prints the menu to the console
+    std::cout << "1. Produce Items\n";
+    std::cout << "2. Add Employee Account\n";
+    std::cout << "3. Add New Product\n";
+    std::cout << "4. Display Production Statistics\n";
+    std::cout << "5. Find Production Number." << std::endl;
+    std::cout << "6. Exit" << std::endl;
 
-        //Prompts the user to enter a number between 1 and 5
-        std::cout << "\n" << "Type in a number between 1 and 5 to run the respective function and press enter.\n"
-                  << std::endl;
+    std::cin >> input_text;
 
-        //prints the menu to the console
-        std::cout << "1. Produce Items\n";
-        std::cout << "2. Add Employee Account\n";
-        std::cout << "3. Add New Product\n";
-        std::cout << "4. Display Production Statistics\n";
-        std::cout << "5. Find Production Number." << std::endl;
-        std::cout << "6. Exit" << std::endl;
-
-        std::cin >> input_text;
-
-        try {
-            input_number = std::stoi(input_text);
-        } catch (std::invalid_argument const &e) {
-            std::cout << "You entered a string or a number with a decimal. Please enter a number." << std::endl;
-            continue;
-        }
-
-        //Switch statement calls the corresponding function, or if the the user enters 6 the loop is broken.
-        switch (input_number) {
-            case 1:
-                produce_items(products, production_records);
-                break;
-            case 2:
-                add_employee_account();
-                break;
-            case 3:
-                add_new_product(products);
-                break;
-            case 4:
-                display_production_statistics();
-                break;
-            case 5:
-                find_production_number(production_records);
-                break;
-            case 6:
-                program_is_running = false;
-                break;
-            default:
-                std::cout << "Your input was invalid. Please try again." << std::endl;
-                break;
-        }
+    try {
+        input_number = std::stoi(input_text);
+    } catch (std::invalid_argument const &e) {
+        std::cout << "You entered a string or a number with a decimal. Please enter a number." << std::endl;
+        return true;
     }
+
+    //Switch statement calls the corresponding function, or if the the user enters 6 the loop is broken.
+    switch (input_number) {
+        case 1:
+            produce_items(products, production_records);
+            break;
+        case 2:
+            add_employee_account();
+            break;
+        case 3:
+            add_new_product(products);
+            break;
+        case 4:
+            display_production_statistics();
+            break;
+        case 5:
+            find_production_number(production_records);
+            break;
+        case 6:
+            return false;
+        default:
+            std::cout << "Your input was invalid. Please try again." << std::endl;
+            break;
+    }
+    return true;
 }
 
 void show_catalog(std::vector<std::string> products) {

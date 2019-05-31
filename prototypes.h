@@ -9,17 +9,33 @@
 #define COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 
 /**
- * @brief Prints the menu to the console and allows the user to enter a number which will run a respective function.
+ * @brief The function loads existing data into the respective vectors if the files exists.
  *
- * The products and production_records vectors are initialized here. If catalog.txt already exists then all products
- * are added to the products vector, then if production.txt exists then all of the production records are added to
- * the production_records vector. A welcome message is printed and then a while loop runs, which prints the menu
- * and prompts the user to enter the number next to the respective function they wish to call. Exception handling
- * is used to ensure that a valid integer is entered.
+ * If the corresponding files exist, then the lines from catalog.txt are added to the products vector, and the lines
+ * from production.txt are added to the production_records vector.
  *
+ * @param products - Reference vector which holds the products in the catalog.
+ * @param production_records - Reference vector of strings which tracks a record of all units produced on the
+ *                             production line.
  * @return void
  */
-void run_program();
+void load_existing_data(std::vector<std::string> &, std::vector<std::string> &);
+
+/**
+ * @brief This function prompts the user to enter a number to run a corresponding function from the menu printed to the
+ *        screen.
+ *
+ * This function is called within main, which returns either true or false then assigned to the flag bool,
+ * program_is_running. The function is called continuously within main until the user enters 6 which returns false and
+ * the loop is broken.
+ *
+ * @param products - Reference vector which holds the products in the catalog.
+ * @param production_records - Reference vector of strings which tracks a record of all units produced on the
+ *                             production line.
+ * @return True is returned if the entry is invalid or if a number other than 6 is entered. False is returned if
+ *         the user enters 6 which exits the while loop within main and completes the program.
+ */
+bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &);
 
 /**
  * @brief Prints the catalog to the console, and prints that the catalog is empty if no products have been added.
