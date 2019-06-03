@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <string>
 #include "prototypes.h"
 
 /**
@@ -270,7 +271,81 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
 }
 
 void add_employee_account() {
-    std::cout << "Add Employee Account Stub\n";
+
+    std::cout << "Enter employee's full name\n";
+
+    std::string first_name;
+    std::cin >> first_name;
+    std::string last_name;
+    std::cin >> last_name;
+
+    std::cin.ignore();
+
+    // Takes first letter of first_name and changes to lowercase.
+    char first_letter = tolower(first_name[0]);
+
+    // Changes last_name to all lowercase.
+    std::transform(last_name.begin(), last_name.end(), last_name.begin(), tolower);
+
+    // create user name in proper format
+    std::string user_name = first_letter + last_name;
+
+    std::cout << "User name: " + user_name + "\n";
+
+    bool password_is_incorrect = true;
+    std::string password_str;
+    char password[20];
+
+    do {
+
+        bool upper_is_found = false;
+        bool lower_is_found = false;
+        bool digit_is_found = false;
+        bool space_is_found = false;
+        bool special_is_found = false;
+
+        std::cout << "\nPlease enter a password between 8 and 20 characters long and at least one\n"
+                     "digit, one lowercase letter, and one uppercase letter." << std::endl;
+        std::getline(std::cin, password_str);
+        strcpy(password, password_str.c_str());
+
+        if (strlen(password) < 8 || strlen(password) > 20) {
+            std::cout << "The password length is not between 8 and 20 characters." << std::endl;
+            continue;
+        }
+
+        //Checks character array for a digit, uppercase and lowercase letters.
+        for (char next_char : password) {
+            if (!space_is_found && isspace(next_char))
+                space_is_found = true;
+            else if (!special_is_found && !isalnum(next_char))
+                special_is_found = true;
+            else {
+
+                if (!digit_is_found && isdigit(next_char))
+                    digit_is_found = true;
+                else if (!lower_is_found && islower(next_char))
+                    lower_is_found = true;
+                else if (!upper_is_found && isupper(next_char))
+                    upper_is_found = true;
+            }
+        }
+        if (upper_is_found && lower_is_found && digit_is_found)
+            password_is_incorrect = false;
+
+        if (space_is_found || special_is_found) {
+            std::cout << "The password cannot contain any spaces or special characters." << std::endl;
+            continue;
+        }
+
+        if (!digit_is_found)
+            std::cout << "The password did not contain a digit." << std::endl;
+        if (!upper_is_found)
+            std::cout << "The password did not contain an uppercase letter." << std::endl;
+        if (!lower_is_found)
+            std::cout << "The password did not contain a lowercase letter." << std::endl;
+
+    } while (password_is_incorrect);
 }
 
 void add_new_product(std::vector<std::string> &products) {
