@@ -17,9 +17,16 @@
  * @param products - Reference vector which holds the products in the catalog.
  * @param production_records - Reference vector of strings which tracks a record of all units produced on the
  *                             production line.
+ * @param usernames - Vector to hold usernames.
+ * @param user_passwords - Vector to hold user_passwords.
+ * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
+ * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
+ * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
+ * @param visual_mobile_serial_num - This int holds the next serial number for the visual-mobile (VM) product type.
  * @return void
  */
-void load_existing_data(std::vector<std::string> &, std::vector<std::string> &);
+void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &,
+                        std::vector<std::string> &, int &, int &, int &, int &);
 
 /**
  * @brief This function prompts the user to enter a number to run a corresponding function from the menu printed to the
@@ -32,10 +39,17 @@ void load_existing_data(std::vector<std::string> &, std::vector<std::string> &);
  * @param products - Reference vector which holds the products in the catalog.
  * @param production_records - Reference vector of strings which tracks a record of all units produced on the
  *                             production line.
+ * @param usernames - Vector to hold usernames.
+ * @param user_passwords - Vector to hold user_passwords.
+ * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
+ * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
+ * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
+ * @param visual_mobile_serial_num - This int holds the next serial number for the visual-mobile (VM) product type.
  * @return True is returned if the entry is invalid or if a number other than 6 is entered. False is returned if
  *         the user enters 6 which exits the while loop within main and completes the program.
  */
-bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &);
+bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &,
+                        std::vector<std::string> &, int &, int &, int &, int &);
 
 /**
  * @brief Prints the catalog to the console, and prints that the catalog is empty if no products have been added.
@@ -60,18 +74,31 @@ void show_catalog(std::vector<std::string>);
  * @param products - Reference vector which holds the products in the catalog.
  * @param production_records - Reference vector of strings which tracks a record of all units produced on the
  * production line.
+ * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
+ * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
+ * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
+ * @param visual_mobile_serial_num - This int holds the next serial number for the visual-mobile (VM) product type.
  * @return void
  */
-void produce_items(std::vector<std::string> &, std::vector<std::string> &);
+void produce_items(std::vector<std::string> &, std::vector<std::string> &, int &, int &, int &, int &);
 
 /**
  * @brief Allows an administrator to add an employee account.
  *
  * This function will eventually allow certain users to add an employee account.
+ * @param usernames - Vector to hold usernames.
+ * @param user_passwords - Vector to hold user_passwords.
  *
  * @return void
  */
-void add_employee_account();
+void add_employee_account(std::vector<std::string> &, std::vector<std::string> &);
+
+/**
+ *
+ * @param str
+ * @return
+ */
+std::string encrypt_string(std::string str);
 
 /**
  * @brief Allows the user to add a new product to the catalog by writing to the catalog.txt file.
