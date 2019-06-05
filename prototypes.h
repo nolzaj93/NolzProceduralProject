@@ -9,6 +9,16 @@
 #define COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 
 /**
+ * @brief
+ *
+ * @param usernames
+ * @param salts
+ * @param user_passwords
+ */
+void authenticate(std::vector<std::string> &usernames, std::vector<std::string> &salts,
+                  std::vector<std::string> &user_passwords);
+
+/**
  * @brief The function loads existing data into the respective vectors if the files exists.
  *
  * If the corresponding files exist, then the lines from catalog.txt are added to the products vector, and the lines
@@ -26,7 +36,7 @@
  * @return void
  */
 void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &,
-                        std::vector<std::string> &, int &, int &, int &, int &);
+                        std::vector<std::string> &, std::vector<std::string> &, int &, int &, int &, int &);
 
 /**
  * @brief This function prompts the user to enter a number to run a corresponding function from the menu printed to the
@@ -40,6 +50,7 @@ void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, 
  * @param production_records - Reference vector of strings which tracks a record of all units produced on the
  *                             production line.
  * @param usernames - Vector to hold usernames.
+ * @param salts - Vector to hold salts.
  * @param user_passwords - Vector to hold user_passwords.
  * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
  * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
@@ -49,7 +60,7 @@ void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, 
  *         the user enters 6 which exits the while loop within main and completes the program.
  */
 bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &,
-                        std::vector<std::string> &, int &, int &, int &, int &);
+                        std::vector<std::string> &, std::vector<std::string> &, int &, int &, int &, int &);
 
 /**
  * @brief Prints the catalog to the console, and prints that the catalog is empty if no products have been added.
@@ -91,7 +102,7 @@ void produce_items(std::vector<std::string> &, std::vector<std::string> &, int &
  *
  * @return void
  */
-void add_employee_account(std::vector<std::string> &, std::vector<std::string> &);
+void add_employee_account(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &);
 
 /**
  *

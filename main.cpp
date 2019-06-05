@@ -12,6 +12,7 @@
 #include <vector>
 #include <string>
 #include <climits>
+#include <random>
 #include "sha256.h"
 #include "prototypes.h"
 
@@ -38,6 +39,9 @@ int main() {
     //Vector to hold usernames.
     std::vector<std::string> usernames;
 
+    //Vector to hold salt values.
+    std::vector<std::string> salts;
+
     //Vector to hold passwords.
     std::vector<std::string> user_passwords;
 
@@ -48,12 +52,17 @@ int main() {
     int visual_mobile_serial_num = 1;
 
     //Loads existing products and production records if the respective text files exist.
-    load_existing_data(products, production_records, usernames, user_passwords, audio_serial_num,
+    load_existing_data(products, production_records, usernames, salts, user_passwords, audio_serial_num,
                        audio_mobile_serial_num,
                        visual_serial_num, visual_mobile_serial_num);
 
     //Welcome message printed to the console.
     std::cout << "Welcome to the Production Line Tracker!\n";
+
+    if (!usernames.empty())
+        authenticate(usernames, salts, user_passwords);
+    else
+        add_employee_account(usernames, salts, user_passwords);
 
     //Declare and initialize program_is_running as a flag bool for the while loop.
     bool program_is_running = true;
@@ -62,15 +71,60 @@ int main() {
     while (program_is_running) {
 
         //The loop calls prompt_menu_choice until the function returns false, which only occurs when the user enters 6.
-        program_is_running = prompt_menu_choice(products, production_records, usernames, user_passwords,
+        program_is_running = prompt_menu_choice(products, production_records, usernames, salts, user_passwords,
                                                 audio_serial_num, audio_mobile_serial_num,
                                                 visual_serial_num, visual_mobile_serial_num);
     }
     return 0;
 }
 
+void authenticate(std::vector<std::string> &usernames, std::vector<std::string> &salts,
+                  std::vector<std::string> &user_passwords) {
+
+
+    bool user_is_valid = false;
+    do {
+        std::cout << "Please enter your username. It is the first letter of your first name\n"
+                     "followed by your last name all in lowercase." << std::endl;
+        std::string input_username;
+        std::cin >> input_username;
+        int user_index = 0;
+
+        for (int index = 0; index < usernames.size(); index++) {
+            if (usernames[index] == input_username) {
+                user_is_valid = true;
+                user_index = index;
+                break;
+            }
+        }
+        if (!user_is_valid) {
+            std::cout << "The username you entered does not exist in the system. Please try again\n"
+                         "or add an employee account." << std::endl;
+            continue;
+        }
+
+        std::cout << "Please enter your password." << std::endl;
+        std::string input_password;
+        std::cin >> input_password;
+
+        input_password = sha256(encrypt_string(salts[user_index] + input_password));
+
+        if (user_passwords[user_index] == input_password) {
+
+            std::cout << "Welcome back " + usernames[user_index] + " " << std::endl;
+            user_is_valid = true;
+
+        } else {
+            std::cout << "The password did not match to the username you entered." << std::endl;
+        }
+
+
+    } while (!user_is_valid);
+}
+
 void load_existing_data(std::vector<std::string> &products, std::vector<std::string> &production_records,
-                        std::vector<std::string> &usernames, std::vector<std::string> &user_passwords,
+                        std::vector<std::string> &usernames, std::vector<std::string> &salts,
+                        std::vector<std::string> &user_passwords,
                         int &audio_serial_num, int &audio_mobile_serial_num, int &visual_serial_num,
                         int &visual_mobile_serial_num) {
 
@@ -110,9 +164,9 @@ void load_existing_data(std::vector<std::string> &products, std::vector<std::str
     }
     production_file.close();
 
-    std::ifstream user_info_file("userinfo.txt");
+    std::ifstream user_info_file("usernames.txt");
 
-    //If userinfo.txt exists then these records are added line by line to the usernames vector.
+    //If usernames.txt exists then these records are added line by line to the usernames vector.
     if (user_info_file.is_open()) {
 
         //Adds each line to the product catalog vector.
@@ -121,6 +175,18 @@ void load_existing_data(std::vector<std::string> &products, std::vector<std::str
         }
     }
     user_info_file.close();
+
+    std::ifstream salts_file("salts.txt");
+
+    //If userinfo.txt exists then these records are added line by line to the usernames vector.
+    if (salts_file.is_open()) {
+
+        //Adds each line to the product catalog vector.
+        while (getline(salts_file, next_line)) {
+            salts.push_back(next_line);
+        }
+    }
+    salts_file.close();
 
     std::ifstream user_pw_file("userpws.txt");
 
@@ -136,9 +202,9 @@ void load_existing_data(std::vector<std::string> &products, std::vector<std::str
 }
 
 bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::string> &production_records,
-                        std::vector<std::string> &usernames, std::vector<std::string> &user_passwords,
-                        int &audio_serial_num, int &audio_mobile_serial_num, int &visual_serial_num,
-                        int &visual_mobile_serial_num) {
+                        std::vector<std::string> &usernames, std::vector<std::string> &salts,
+                        std::vector<std::string> &user_passwords, int &audio_serial_num, int &audio_mobile_serial_num,
+                        int &visual_serial_num, int &visual_mobile_serial_num) {
 
     //Declare and initialize input_number which is used to hold number input by user.
     std::string input_text;
@@ -172,7 +238,7 @@ bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::str
                           visual_mobile_serial_num);
             break;
         case 2:
-            add_employee_account(usernames, user_passwords);
+            add_employee_account(usernames, salts, user_passwords);
             break;
         case 3:
             add_new_product(products);
@@ -310,9 +376,10 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
 
 }
 
-void add_employee_account(std::vector<std::string> &usernames, std::vector<std::string> &user_passwords) {
+void add_employee_account(std::vector<std::string> &usernames, std::vector<std::string> &salts,
+                          std::vector<std::string> &user_passwords) {
 
-    std::cout << "Enter employee's full name\n";
+    std::cout << "\nPlease enter your first and last name separated by a space. For example, John Smith.\n";
 
     std::string first_name;
     std::cin >> first_name;
@@ -332,8 +399,8 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
 
     std::cout << "User name: " + user_name + "\n";
 
-    bool password_is_incorrect = true;
-    std::string password_str;
+    bool password_is_incorrect;
+    std::string pw_str;
     char password[20];
 
     do {
@@ -346,8 +413,8 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
 
         std::cout << "\nPlease enter a password between 8 and 20 characters long and at least one\n"
                      "digit, one lowercase letter, and one uppercase letter." << std::endl;
-        std::getline(std::cin, password_str);
-        strcpy(password, password_str.c_str());
+        std::getline(std::cin, pw_str);
+        strcpy(password, pw_str.c_str());
 
         if (strlen(password) < 8 || strlen(password) > 20) {
             std::cout << "The password length is not between 8 and 20 characters." << std::endl;
@@ -382,28 +449,52 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
         if (!lower_is_found)
             std::cout << "The password did not contain a lowercase letter." << std::endl;
 
+        password_is_incorrect = true;
+
     } while (password_is_incorrect);
+
+    std::random_device rd;
+    srand(rd());
+    std::string salt = std::to_string(ULLONG_MAX - rd());
+    salts.push_back(salt);
+
+    // Declares salts_file object and opens salts.txt. New text is appended.
+    std::ofstream salts_file;
+    salts_file.open("salts.txt", std::ios::app);
+
+    salts_file << salt << std::endl;
+
+    salts_file.close();
 
     // Declares userinfo_file object and opens userinfo.txt. New text is appended.
     std::ofstream userinfo_file;
-    userinfo_file.open("userinfo.txt", std::ios::app);
+    userinfo_file.open("usernames.txt", std::ios::app);
 
     userinfo_file << user_name << std::endl;
 
     userinfo_file.close();
     usernames.push_back(user_name);
 
-    srand(time(nullptr));
-    std::string salt = std::to_string(ULLONG_MAX - rand());
-
-    password_str = salt + password;
+    pw_str = encrypt_string(salt + password);
     std::strcpy(password, salt.c_str());
+    pw_str = sha256(pw_str);
+    user_passwords.push_back(pw_str);
+
+    // Declares pw_file object and opens userpws.txt. New text is appended.
+    std::ofstream pw_file;
+    pw_file.open("userpws.txt", std::ios::app);
+
+    pw_file << pw_str << std::endl;
+
+    pw_file.close();
+    usernames.push_back(user_name);
 }
 
 std::string encrypt_string(std::string str) {
     if (str.length() == 1) {
         return str;
     } else {
+        //Recursively call through the string adding to the ASCII value of each element.
         return char((int) str[0] + 3) + encrypt_string(str.substr(1, str.length() - 1));
     }
 }
