@@ -1,6 +1,8 @@
 /** @file prototypes.h
  *  @brief This file is the header file which defines the function prototypes for the COP2001 Procedural Project.
  *
+ * The function prototypes are stored here and are defined within main.cpp.
+ *
  *  @author Austin Nolz
  *  @bug - No known bugs currently.
  */
@@ -9,11 +11,16 @@
 #define COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 
 /**
- * @brief
+ * @brief This function only allows the user to continue to the program if the username and password matches.
  *
- * @param usernames
- * @param salts
- * @param user_passwords
+ * If the usernames vector is empty, then add_employee_account (line 68) is executed, which creates a master user.
+ * The user is required to authenticate if the vector is not empty, which prompts the user for the username and
+ * password. The username contains first syllable of first name and all of last in all lowercase, and the Password must
+ * contain at least one uppercase, one lowercase, and one digit with no spaces or special characters.
+ *
+ * @param usernames - Reference vector holds usernames.
+ * @param salts - Reference vector to hold salts.
+ * @param user_passwords - Reference vector to hold user_passwords.
  */
 void authenticate(std::vector<std::string> &usernames, std::vector<std::string> &salts,
                   std::vector<std::string> &user_passwords);
@@ -22,13 +29,15 @@ void authenticate(std::vector<std::string> &usernames, std::vector<std::string> 
  * @brief The function loads existing data into the respective vectors if the files exists.
  *
  * If the corresponding files exist, then the lines from catalog.txt are added to the products vector, and the lines
- * from production.txt are added to the production_records vector.
+ * from production.txt are added to the production_records vector. The respective serial numbers are incremented
+ * depending on the substr containing the item_type_code.
  *
  * @param products - Reference vector which holds the products in the catalog.
  * @param production_records - Reference vector of strings which tracks a record of all units produced on the
  *                             production line.
- * @param usernames - Vector to hold usernames.
- * @param user_passwords - Vector to hold user_passwords.
+ * @param usernames - Reference vector to hold usernames.
+ * @param salts - Reference vector to hold salts.
+ * @param user_passwords - Reference vector to hold user_passwords.
  * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
  * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
  * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
@@ -49,9 +58,9 @@ void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, 
  * @param products - Reference vector which holds the products in the catalog.
  * @param production_records - Reference vector of strings which tracks a record of all units produced on the
  *                             production line.
- * @param usernames - Vector to hold usernames.
- * @param salts - Vector to hold salts.
- * @param user_passwords - Vector to hold user_passwords.
+ * @param usernames - Reference vector to hold usernames.
+ * @param salts - Reference vector to hold salts.
+ * @param user_passwords - Reference vector to hold user_passwords.
  * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
  * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
  * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
@@ -73,6 +82,7 @@ bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &, 
  * @return void
  */
 void show_catalog(std::vector<std::string>);
+
 
 /**
  * @brief Allows the user to track the production of each product within the catalog by writing to the production.txt
@@ -96,7 +106,9 @@ void produce_items(std::vector<std::string> &, std::vector<std::string> &, int &
 /**
  * @brief Allows an administrator to add an employee account.
  *
- * This function will eventually allow certain users to add an employee account.
+ * This function allows existing users to add an employee account. The passwords are "encrypted" with a cipher using
+ * encrypt_string(str), then a unique pseudo-random salt value is prepended. This string is then hashed using SHA256.
+ *
  * @param usernames - Vector to hold usernames.
  * @param user_passwords - Vector to hold user_passwords.
  *
@@ -105,9 +117,13 @@ void produce_items(std::vector<std::string> &, std::vector<std::string> &, int &
 void add_employee_account(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &);
 
 /**
+ * @brief Encrypts user passwords combined with a pseudo-random long long.
  *
- * @param str
- * @return
+ * This function shifts the ASCII value of each password character and operates on the password string which is
+ * prepended with a pseuo-random salt value.
+ *
+ * @param str - String composed of salt and encrypted password.
+ * @return Encrypted ciphertext is returned with prepended randomly generated salt which is then hashed.
  */
 std::string encrypt_string(std::string str);
 

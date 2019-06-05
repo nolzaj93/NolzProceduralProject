@@ -1,6 +1,9 @@
 /** @file main.cpp
  *  @brief This file is C++ source code for the COP2001 Procedural Project.
  *
+ * The Production Line Tracker requires a valid username and password to enter the program. The user is
+ * given the option at the menu to add a new product to the production line, add employe
+ *
  *  @author Austin Nolz
  *  @bug - No known bugs currently.
  */
@@ -30,19 +33,11 @@
 */
 int main() {
 
-    //Vector to hold the products within the product catalog added from catalog.txt.
+    //Vectors are declared.
     std::vector<std::string> products;
-
-    //Vector to hold the production_records is declared and production.txt is opened if it exists.
     std::vector<std::string> production_records;
-
-    //Vector to hold usernames.
     std::vector<std::string> usernames;
-
-    //Vector to hold salt values.
     std::vector<std::string> salts;
-
-    //Vector to hold passwords.
     std::vector<std::string> user_passwords;
 
     //Production and serial numbers are declared.
@@ -51,7 +46,7 @@ int main() {
     int visual_serial_num = 1;
     int visual_mobile_serial_num = 1;
 
-    //Loads existing products and production records if the respective text files exist.
+    //Loads existing products and production records if the respective text files exist, user info, and serial numbers.
     load_existing_data(products, production_records, usernames, salts, user_passwords, audio_serial_num,
                        audio_mobile_serial_num,
                        visual_serial_num, visual_mobile_serial_num);
@@ -59,10 +54,14 @@ int main() {
     //Welcome message printed to the console.
     std::cout << "Welcome to the Production Line Tracker!\n";
 
+    //If usernames is not empty, then authenticate is called to confirm employee ID.
     if (!usernames.empty())
         authenticate(usernames, salts, user_passwords);
-    else
+    else {
+
+        std::cout << "Administrator registration\n";
         add_employee_account(usernames, salts, user_passwords);
+    }
 
     //Declare and initialize program_is_running as a flag bool for the while loop.
     bool program_is_running = true;
@@ -81,43 +80,57 @@ int main() {
 void authenticate(std::vector<std::string> &usernames, std::vector<std::string> &salts,
                   std::vector<std::string> &user_passwords) {
 
-
     bool user_is_valid = false;
-    do {
-        std::cout << "Please enter your username. It is the first letter of your first name\n"
-                     "followed by your last name all in lowercase." << std::endl;
-        std::string input_username;
-        std::cin >> input_username;
-        int user_index = 0;
+    int user_index = 0;
 
-        for (int index = 0; index < usernames.size(); index++) {
-            if (usernames[index] == input_username) {
-                user_is_valid = true;
-                user_index = index;
-                break;
+    do {
+
+        while (!user_is_valid) {
+            //Prompts for username and stores in input_username.
+            std::cout << "\nPlease enter your username. It is the first letter of your first name\n"
+                         "followed by your last name in all lowercase." << std::endl;
+            std::string input_username;
+            std::cin >> input_username;
+
+            //Iterates through the usernames vector and checks if the input is the same as an element and sets
+            // user_index to the index where the input matches.
+            for (int index = 0; index < usernames.size(); index++) {
+                if (usernames[index] == input_username) {
+                    user_is_valid = true;
+                    user_index = index;
+                    break;
+                }
+            }
+            //If the match for input_username is not found, then the user is notified and the loop continues to the
+            //next iteration.
+            if (!user_is_valid) {
+                std::cout << "The username you entered does not exist in the system. Please try again\n"
+                             "or add an employee account." << std::endl;
+                continue;
             }
         }
-        if (!user_is_valid) {
-            std::cout << "The username you entered does not exist in the system. Please try again\n"
-                         "or add an employee account." << std::endl;
-            continue;
-        }
 
+        //Prompts for password and stores in input_password.
         std::cout << "Please enter your password." << std::endl;
         std::string input_password;
         std::cin >> input_password;
 
+        //Prepends the user's randomly generated salt, encrypts the string with a Caesar cipher, and is sent through
+        // the hash function.
         input_password = sha256(encrypt_string(salts[user_index] + input_password));
 
+        //If the string stored in input_password is equal to the stored hashed password, then user_is_valid is set to
+        // true, and the user continues to the program.
         if (user_passwords[user_index] == input_password) {
 
             std::cout << "Welcome back " + usernames[user_index] + " " << std::endl;
             user_is_valid = true;
 
         } else {
+            //If the hashed input_password does not match, then the loop continues because user_is_valid is set to false
             std::cout << "The password did not match to the username you entered." << std::endl;
+            user_is_valid = false;
         }
-
 
     } while (!user_is_valid);
 }
@@ -285,8 +298,8 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
     //Ignores the newline character read when the user presses enter/return.
     std::cin.ignore();
 
-    int production_number = production_records.size() + 1;
-
+    int production_number;
+    production_number = production_records.size() + 1;
 
     std::string entry_is_correct = "0";
     std::string product_choice;
@@ -425,37 +438,39 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
         for (char next_char : password) {
             if (!space_is_found && isspace(next_char))
                 space_is_found = true;
-            if (!special_is_found && !isalnum(next_char))
+            else if (!special_is_found && !isalnum(next_char))
                 special_is_found = true;
-            if (!digit_is_found && isdigit(next_char))
+            else if (!digit_is_found && isdigit(next_char))
                 digit_is_found = true;
-            if (!lower_is_found && islower(next_char))
+            else if (!lower_is_found && islower(next_char))
                 lower_is_found = true;
-            if (!upper_is_found && isupper(next_char))
+            else if (!upper_is_found && isupper(next_char))
                 upper_is_found = true;
         }
 
-        if (upper_is_found && lower_is_found && digit_is_found) {
+        //Breaks the loop if
+        if (upper_is_found && lower_is_found && digit_is_found && !space_is_found && !special_is_found) {
             std::cout << "Your password has been saved." << std::endl;
             break;
-        } else if (space_is_found || special_is_found) {
-            std::cout << "The password cannot contain spaces or special characters." << std::endl;
         }
+        std::cout << (space_is_found || special_is_found
+                      ? "The password cannot contain spaces or special characters.\n" : "");
 
-        if (!digit_is_found)
-            std::cout << "The password did not contain a digit." << std::endl;
-        if (!upper_is_found)
-            std::cout << "The password did not contain an uppercase letter." << std::endl;
-        if (!lower_is_found)
-            std::cout << "The password did not contain a lowercase letter." << std::endl;
+        std::cout << (!digit_is_found ? "The password did not contain a digit.\n" : "");
+
+        std::cout << (!upper_is_found ? "The password did not contain an uppercase letter.\n" : "");
+
+        std::cout << (!lower_is_found ? "The password did not contain a lowercase letter.\n" : "");
 
         password_is_incorrect = true;
 
     } while (password_is_incorrect);
 
+    //Generates pseudo-random salt.
     std::random_device rd;
     srand(rd());
-    std::string salt = std::to_string(ULLONG_MAX - rd());
+    std::string salt;
+    salt = std::to_string((ULLONG_MAX - rd()) / 2);
     salts.push_back(salt);
 
     // Declares salts_file object and opens salts.txt. New text is appended.
@@ -475,6 +490,7 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     userinfo_file.close();
     usernames.push_back(user_name);
 
+    //Prepends salt to pw_str
     pw_str = encrypt_string(salt + password);
     std::strcpy(password, salt.c_str());
     pw_str = sha256(pw_str);
@@ -487,7 +503,6 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     pw_file << pw_str << std::endl;
 
     pw_file.close();
-    usernames.push_back(user_name);
 }
 
 std::string encrypt_string(std::string str) {
@@ -495,7 +510,7 @@ std::string encrypt_string(std::string str) {
         return str;
     } else {
         //Recursively call through the string adding to the ASCII value of each element.
-        return char((int) str[0] + 3) + encrypt_string(str.substr(1, str.length() - 1));
+        return char((int) str[0] + 7) + encrypt_string(str.substr(1, str.length() - 1));
     }
 }
 
