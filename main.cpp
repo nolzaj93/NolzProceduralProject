@@ -54,7 +54,8 @@ int main() {
     //Welcome message printed to the console.
     std::cout << "Welcome to the Production Line Tracker!\n";
 
-    //If usernames is not empty, then authenticate is called to confirm employee ID.
+    //If usernames is not empty, then authenticate is called to confirm employee ID. Otherwise, administrator registers
+    // a master account.
     if (!usernames.empty())
         authenticate(usernames, salts, user_passwords);
     else {
@@ -123,7 +124,7 @@ void authenticate(std::vector<std::string> &usernames, std::vector<std::string> 
         // true, and the user continues to the program.
         if (user_passwords[user_index] == input_password) {
 
-            std::cout << "Welcome back " + usernames[user_index] + " " << std::endl;
+            std::cout << "Welcome back, " + usernames[user_index] + "!" << std::endl;
             user_is_valid = true;
 
         } else {
@@ -251,6 +252,7 @@ bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::str
                           visual_mobile_serial_num);
             break;
         case 2:
+            std::cin.ignore();
             add_employee_account(usernames, salts, user_passwords);
             break;
         case 3:
@@ -322,7 +324,6 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
             if (choice_number < 1 || choice_number > products.size())
                 throw std::exception();
 
-
         } catch (std::invalid_argument const &e) {
             std::cout << "You entered a string or a number with a decimal. Please enter a number." << std::endl;
             continue;
@@ -366,7 +367,6 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
          * filled with zeros and added to the end of the first three letters of manufacturer and itemtypecode.
          */
         std::ostringstream serial_num;
-
         serial_num << manufacturer_substr << item_type_code;
 
         if (item_type_code == "MM")
@@ -386,20 +386,19 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
     }
     production_file_write.close();
     std::cout << "Production record has been saved to file." << std::endl;
-
 }
 
 void add_employee_account(std::vector<std::string> &usernames, std::vector<std::string> &salts,
                           std::vector<std::string> &user_passwords) {
 
-    std::cout << "\nPlease enter your first and last name separated by a space. For example, John Smith.\n";
 
+    std::cout << "\nPlease enter your first name. For example, John\n";
     std::string first_name;
-    std::cin >> first_name;
-    std::string last_name;
-    std::cin >> last_name;
+    std::getline(std::cin, first_name);
 
-    std::cin.ignore();
+    std::cout << "\nPlease enter your last name. For example, Smith\n";
+    std::string last_name;
+    std::getline(std::cin, last_name);
 
     // Takes first letter of first_name and changes to lowercase.
     char first_letter = tolower(first_name[0]);
@@ -410,11 +409,10 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     // create user name in proper format
     std::string user_name = first_letter + last_name;
 
-    std::cout << "User name: " + user_name + "\n";
+    std::cout << "User name: " + user_name << std::endl;
 
     bool password_is_incorrect;
     std::string pw_str;
-    char password[20];
 
     do {
 
@@ -427,6 +425,8 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
         std::cout << "\nPlease enter a password between 8 and 20 characters long and at least one\n"
                      "digit, one lowercase letter, and one uppercase letter." << std::endl;
         std::getline(std::cin, pw_str);
+        char password[pw_str.length()];
+
         strcpy(password, pw_str.c_str());
 
         if (strlen(password) < 8 || strlen(password) > 20) {
@@ -453,16 +453,15 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
             std::cout << "Your password has been saved." << std::endl;
             break;
         }
-        std::cout << (space_is_found || special_is_found
+        std::cout << ((space_is_found || special_is_found)
                       ? "The password cannot contain spaces or special characters.\n" : "");
 
         std::cout << (!digit_is_found ? "The password did not contain a digit.\n" : "");
-
         std::cout << (!upper_is_found ? "The password did not contain an uppercase letter.\n" : "");
-
         std::cout << (!lower_is_found ? "The password did not contain a lowercase letter.\n" : "");
 
         password_is_incorrect = true;
+        std::cin.ignore();
 
     } while (password_is_incorrect);
 
@@ -490,9 +489,8 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     userinfo_file.close();
     usernames.push_back(user_name);
 
-    //Prepends salt to pw_str
-    pw_str = encrypt_string(salt + password);
-    std::strcpy(password, salt.c_str());
+    //Prepends salt to pw_str, encrypts, then runs through hash function.
+    pw_str = encrypt_string(salt + pw_str);
     pw_str = sha256(pw_str);
     user_passwords.push_back(pw_str);
 
