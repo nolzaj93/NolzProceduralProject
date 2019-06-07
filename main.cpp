@@ -809,10 +809,11 @@ void find_production_number(std::vector<std::string> production_records) {
         bool serial_num_found = false;
         std::string record;
 
+        //Iterates through the production record checking if the input serial number matches the substring of the
+        // serial number within the production record.
         for (int count = 0; count < production_records.size(); count++) {
-            record = production_records[count];
 
-            if (record.substr(record.length() - 10, 10) == input_serial_num) {
+            if (production_records[count].substr(production_records[count].length() - 10, 10) == input_serial_num) {
                 std::cout << "The production number for the serial number you entered is " + std::to_string(count + 1);
                 serial_num_found = true;
             }
