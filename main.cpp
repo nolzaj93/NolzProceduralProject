@@ -391,14 +391,86 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
 void add_employee_account(std::vector<std::string> &usernames, std::vector<std::string> &salts,
                           std::vector<std::string> &user_passwords) {
 
-
-    std::cout << "\nPlease enter your first name. For example, John\n";
     std::string first_name;
-    std::getline(std::cin, first_name);
-
-    std::cout << "\nPlease enter your last name. For example, Smith\n";
     std::string last_name;
-    std::getline(std::cin, last_name);
+    bool username_valid;
+    bool is_digit;
+    bool is_space;
+    bool is_not_alpha;
+
+    do {
+        username_valid = false;
+        is_digit = false;
+        is_space = false;
+        is_not_alpha = false;
+
+        try{
+
+            std::cout << "\nPlease enter your first name. For example, John\n";
+            std::getline(std::cin, first_name);
+
+            //Iterates through each character of first_name checking if the character is a digit, space, or special ch.
+            for (char next_char : first_name) {
+                if(!is_digit && isdigit(next_char))
+                    is_digit = true;
+                else if (!is_space && isspace(next_char))
+                    is_space = true;
+                else if (!is_not_alpha && !isalnum(next_char))
+                    is_not_alpha = true;
+            }
+
+            if(is_digit || is_space || is_not_alpha)
+                throw std::exception();
+            else
+                username_valid = true;
+
+        } catch(std::exception &ex){
+            if(is_digit)
+                std::cout << "\nYou accidentally typed a number in your first name.\n";
+            if(is_space)
+                std::cout << "\nYour first name cannot contain a space.\n";
+            if(is_not_alpha)
+                std::cout << "\nYour first name cannot contain a special character.\n";
+            continue;
+        }
+
+        username_valid = false;
+        is_digit = false;
+        is_space = false;
+        is_not_alpha = false;
+
+        try{
+
+            std::cout << "\nPlease enter your last name. For example, Smith\n";
+            std::getline(std::cin, last_name);
+
+            //Iterates through each character of first_name checking if the character is a digit, space, or special ch.
+            for (char next_char : last_name) {
+                if(!is_digit && isdigit(next_char))
+                    is_digit = true;
+                else if (!is_space && isspace(next_char))
+                    is_space = true;
+                else if (!is_not_alpha && !isalnum(next_char))
+                    is_not_alpha = true;
+            }
+
+            if(is_digit || is_space || is_not_alpha)
+                throw std::exception();
+            else
+                username_valid = true;
+
+        } catch(std::exception &ex){
+            if(is_digit)
+                std::cout << "\nYou accidentally typed a number in your last name.\n";
+            if(is_space)
+                std::cout << "\nYour last name cannot contain a space.\n";
+            if(is_not_alpha)
+                std::cout << "\nYour last name cannot contain a special character.\n";
+            continue;
+        }
+
+    } while (!username_valid);
+
 
     // Takes first letter of first_name and changes to lowercase.
     char first_letter = tolower(first_name[0]);
@@ -414,13 +486,19 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     bool password_is_incorrect;
     std::string pw_str;
 
-    do {
+    bool upper_is_found;
+    bool lower_is_found;
+    bool digit_is_found;
+    bool space_is_found;
+    bool special_is_found;
 
-        bool upper_is_found = false;
-        bool lower_is_found = false;
-        bool digit_is_found = false;
-        bool space_is_found = false;
-        bool special_is_found = false;
+    do {
+        password_is_incorrect = true;
+        upper_is_found = false;
+        lower_is_found = false;
+        digit_is_found = false;
+        space_is_found = false;
+        special_is_found = false;
 
         std::cout << "\nPlease enter a password between 8 and 20 characters long and at least one\n"
                      "digit, one lowercase letter, and one uppercase letter." << std::endl;
@@ -448,7 +526,7 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
                 upper_is_found = true;
         }
 
-        //Breaks the loop if
+        //Breaks the loop if it has an uppercase, lowercase, digit, no spaces, and no special characters.
         if (upper_is_found && lower_is_found && digit_is_found && !space_is_found && !special_is_found) {
             std::cout << "Your password has been saved." << std::endl;
             break;
@@ -460,7 +538,6 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
         std::cout << (!upper_is_found ? "The password did not contain an uppercase letter.\n" : "");
         std::cout << (!lower_is_found ? "The password did not contain a lowercase letter.\n" : "");
 
-        password_is_incorrect = true;
         std::cin.ignore();
 
     } while (password_is_incorrect);
@@ -469,7 +546,7 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     std::random_device rd;
     srand(rd());
     std::string salt;
-    salt = std::to_string((ULLONG_MAX - rd()) / 2);
+    salt = std::to_string((ULLONG_MAX/rd()));
     salts.push_back(salt);
 
     // Declares salts_file object and opens salts.txt. New text is appended.
