@@ -404,14 +404,14 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
         is_space = false;
         is_not_alpha = false;
 
-        try{
+        try {
 
             std::cout << "\nPlease enter your first name. For example, John\n";
             std::getline(std::cin, first_name);
 
             //Iterates through each character of first_name checking if the character is a digit, space, or special ch.
             for (char next_char : first_name) {
-                if(!is_digit && isdigit(next_char))
+                if (!is_digit && isdigit(next_char))
                     is_digit = true;
                 else if (!is_space && isspace(next_char))
                     is_space = true;
@@ -419,17 +419,17 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
                     is_not_alpha = true;
             }
 
-            if(is_digit || is_space || is_not_alpha)
+            if (is_digit || is_space || is_not_alpha)
                 throw std::exception();
             else
                 username_valid = true;
 
-        } catch(std::exception &ex){
-            if(is_digit)
+        } catch (std::exception &ex) {
+            if (is_digit)
                 std::cout << "\nYou accidentally typed a number in your first name.\n";
-            if(is_space)
+            if (is_space)
                 std::cout << "\nYour first name cannot contain a space.\n";
-            if(is_not_alpha)
+            if (is_not_alpha)
                 std::cout << "\nYour first name cannot contain a special character.\n";
             continue;
         }
@@ -439,14 +439,14 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
         is_space = false;
         is_not_alpha = false;
 
-        try{
+        try {
 
             std::cout << "\nPlease enter your last name. For example, Smith\n";
             std::getline(std::cin, last_name);
 
             //Iterates through each character of first_name checking if the character is a digit, space, or special ch.
             for (char next_char : last_name) {
-                if(!is_digit && isdigit(next_char))
+                if (!is_digit && isdigit(next_char))
                     is_digit = true;
                 else if (!is_space && isspace(next_char))
                     is_space = true;
@@ -454,17 +454,17 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
                     is_not_alpha = true;
             }
 
-            if(is_digit || is_space || is_not_alpha)
+            if (is_digit || is_space || is_not_alpha)
                 throw std::exception();
             else
                 username_valid = true;
 
-        } catch(std::exception &ex){
-            if(is_digit)
+        } catch (std::exception &ex) {
+            if (is_digit)
                 std::cout << "\nYou accidentally typed a number in your last name.\n";
-            if(is_space)
+            if (is_space)
                 std::cout << "\nYour last name cannot contain a space.\n";
-            if(is_not_alpha)
+            if (is_not_alpha)
                 std::cout << "\nYour last name cannot contain a special character.\n";
             continue;
         }
@@ -546,7 +546,7 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     std::random_device rd;
     srand(rd());
     std::string salt;
-    salt = std::to_string((ULLONG_MAX/rd()));
+    salt = std::to_string((ULLONG_MAX / rd()));
     salts.push_back(salt);
 
     // Declares salts_file object and opens salts.txt. New text is appended.
