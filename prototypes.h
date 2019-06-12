@@ -10,20 +10,46 @@
 #ifndef COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 #define COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 
+struct Production_Record {
+    int production_number;
+    std::string product;
+    std::string serial_num;
+};
+
+struct Product {
+    std::string manufacturer;
+    std::string prod_name;
+    std::string item_type_code;
+    std::string product_specs;
+    std::string product_info;
+};
+
+struct User {
+    std::string username;
+    std::string salt;
+    std::string password;
+    std::string access_level;
+};
+
+struct Statistics {
+    int production_number;
+    int audio_serial_num;
+    int audio_mobile_serial_num;
+    int visual_serial_num;
+    int visual_mobile_serial_num;
+};
+
 /**
  * @brief This function only allows the user to continue to the program if the username and password matches.
  *
- * If the usernames vector is empty, then add_employee_account (line 68) is executed, which creates a master user.
- * The user is required to authenticate if the vector is not empty, which prompts the user for the username and
- * password. The username contains first syllable of first name and all of last in all lowercase, and the Password must
- * contain at least one uppercase, one lowercase, and one digit with no spaces or special characters.
+ * If the users vector is empty, then add_employee_account is called, which creates the first user with access level
+ * set to "admin". The user is required to authenticate if the vector is not empty, which prompts the user for the
+ * username and password. The username contains first syllable of first name and all of last in all lowercase, and
+ * the Password must contain at least one uppercase, one lowercase, and one digit with no spaces or special characters.
  *
- * @param usernames - Reference vector holds usernames.
- * @param salts - Reference vector to hold salts.
- * @param user_passwords - Reference vector to hold user_passwords.
+ * @param users - Reference vector of type User, which holds username, salt, password, and access level.
  */
-void authenticate(std::vector<std::string> &usernames, std::vector<std::string> &salts,
-                  std::vector<std::string> &user_passwords);
+void authenticate(std::vector<User> &);
 
 /**
  * @brief The function loads existing data into the respective vectors if the files exists.
@@ -32,20 +58,16 @@ void authenticate(std::vector<std::string> &usernames, std::vector<std::string> 
  * from production.txt are added to the production_records vector. The respective serial numbers are incremented
  * depending on the substr containing the item_type_code.
  *
- * @param products - Reference vector which holds the products in the catalog.
- * @param production_records - Reference vector of strings which tracks a record of all units produced on the
- *                             production line.
- * @param usernames - Reference vector to hold usernames.
- * @param salts - Reference vector to hold salts.
- * @param user_passwords - Reference vector to hold user_passwords.
- * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
- * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
- * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
- * @param visual_mobile_serial_num - This int holds the next serial number for the visual-mobile (VM) product type.
+ * @param products - Reference vector of type Product, which holds manufacturer, product name, item type code, product
+ *                  specs, and product_info which concatenates all info together.
+ * @param prod_record - Reference vector of type Production_Record, which holds production number, product, and serial
+ *                      number.
+ * @param stats - Instance of type Statistics, which holds the next production number, and serial numbers for each type.
+ * @param users - Reference vector of type User, which holds username, salt, password, and access level.
+ *
  * @return void
  */
-void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &,
-                        std::vector<std::string> &, std::vector<std::string> &, int &, int &, int &, int &);
+void load_existing_data(std::vector<Product> &, std::vector<Production_Record> &, Statistics &, std::vector<User> &);
 
 /**
  * @brief This function prompts the user to enter a number to run a corresponding function from the menu printed to the
@@ -55,21 +77,16 @@ void load_existing_data(std::vector<std::string> &, std::vector<std::string> &, 
  * program_is_running. The function is called continuously within main until the user enters 6 which returns false and
  * the loop is broken.
  *
- * @param products - Reference vector which holds the products in the catalog.
- * @param production_records - Reference vector of strings which tracks a record of all units produced on the
- *                             production line.
- * @param usernames - Reference vector to hold usernames.
- * @param salts - Reference vector to hold salts.
- * @param user_passwords - Reference vector to hold user_passwords.
- * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
- * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
- * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
- * @param visual_mobile_serial_num - This int holds the next serial number for the visual-mobile (VM) product type.
+ * @param products - Reference vector of type Product, which holds manufacturer, product name, item type code, product
+ *                  specs, and product_info which concatenates all info together.
+ * @param prod_record - Reference vector of type Production_Record, which holds production number, product, and serial
+ *                      number.
+ * @param stats - Instance of type Statistics, which holds the next production number, and serial numbers for each type.
+ * @param users - Reference vector of type User, which holds username, salt, password, and access level.
  * @return True is returned if the entry is invalid or if a number other than 6 is entered. False is returned if
  *         the user enters 6 which exits the while loop within main and completes the program.
  */
-bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &,
-                        std::vector<std::string> &, std::vector<std::string> &, int &, int &, int &, int &);
+bool prompt_menu_choice(std::vector<Product> &, std::vector<Production_Record> &, Statistics &, std::vector<User> &);
 
 /**
  * @brief Prints the catalog to the console, and prints that the catalog is empty if no products have been added.
@@ -78,10 +95,11 @@ bool prompt_menu_choice(std::vector<std::string> &, std::vector<std::string> &, 
  * elements to the console. It also prints out a number in front of each element to allow the user to choose a product
  * within the function named produce_items.
  *
- * @param products - Vector which holds the products in the catalog.
+ * @param products - Reference vector of type Product, which holds manufacturer, product name, item type code, product
+ *                  specs, and product_info which concatenates all info together.
  * @return void
  */
-void show_catalog(std::vector<std::string>);
+void show_catalog(const std::vector<Product> &);
 
 
 /**
@@ -92,16 +110,14 @@ void show_catalog(std::vector<std::string>);
  * they wish to track. Then. the user is prompted to enter the number of units produced. Each item tracked is added
  * to the production_records vector and written to a file named production.txt.
  *
- * @param products - Reference vector which holds the products in the catalog.
- * @param production_records - Reference vector of strings which tracks a record of all units produced on the
- * production line.
- * @param audio_serial_num - This integer holds the next serial number for the audio (MM) product type.
- * @param audio_mobile_serial_num - This int holds the next serial number for the audio-mobile (AM) product type.
- * @param visual_serial_num - This int holds the next serial number for the visual (VI) product type.
- * @param visual_mobile_serial_num - This int holds the next serial number for the visual-mobile (VM) product type.
+ * @param products - Reference vector of type Product, which holds manufacturer, product name, item type code, product
+ *                  specs, and product_info which concatenates all info together.
+ * @param prod_record - Reference vector of type Production_Record, which holds production number, product, and serial
+ *                      number.
+ * @param stats - Instance of type Statistics, which holds the next production number, and serial numbers for each type.
  * @return void
  */
-void produce_items(std::vector<std::string> &, std::vector<std::string> &, int &, int &, int &, int &);
+void produce_items(std::vector<Product> &, std::vector<Production_Record> &, Statistics &);
 
 /**
  * @brief Allows an administrator to add an employee account.
@@ -109,12 +125,11 @@ void produce_items(std::vector<std::string> &, std::vector<std::string> &, int &
  * This function allows existing users to add an employee account. The passwords are "encrypted" with a cipher using
  * encrypt_string(str), then a unique pseudo-random salt value is prepended. This string is then hashed using SHA256.
  *
- * @param usernames - Vector to hold usernames.
- * @param user_passwords - Vector to hold user_passwords.
+ * @param users - Reference vector of type User, which holds username, salt, password, and access level.
  *
  * @return void
  */
-void add_employee_account(std::vector<std::string> &, std::vector<std::string> &, std::vector<std::string> &);
+void add_employee_account(std::vector<User> &);
 
 /**
  * @brief Encrypts user passwords combined with a pseudo-random long long.
@@ -135,10 +150,11 @@ std::string encrypt_string(std::string str);
  * product specifications. If the user confirms the information they entered is correct, then the new product is
  * added to the products vector and written to catalog.txt.
  *
- * @param products - Reference vector which holds products in the catalog.
+ * @param products - Reference vector of type Product, which holds manufacturer, product name, item type code, product
+ *                  specs, and product_info which concatenates all info together.
  * @return void
  */
-void add_new_product(std::vector<std::string> &);
+void add_new_product(std::vector<Product> &);
 
 /**
  * @brief This function adds a music player to the catalog.
@@ -170,7 +186,7 @@ std::string add_movie_player();
  *
  * @return void
  */
-void display_production_statistics();
+void display_production_statistics(const Statistics&);
 
 /**
  * @brief User inputs a serial number and the respective production number is output.
@@ -180,9 +196,10 @@ void display_production_statistics();
  * vector. If the element is found, then the production number is found by adding 1 to the index where it was found.
  * If it is not found, then the user is notified and returned to the menu within run_program.
  *
- * @param production_records - Vector which holds the production records of all units that have been tracked.
+ * @param prod_record - Reference vector of type Production_Record, which holds production number, product, and serial
+ *                      number.
  * @return void
  */
-void find_production_number(std::vector<std::string>);
+void find_production_number(const std::vector<Production_Record> &);
 
 #endif //COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H

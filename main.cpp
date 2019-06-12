@@ -16,8 +16,11 @@
 #include <string>
 #include <climits>
 #include <random>
+#include <algorithm>
+#include <cstring>
 #include "sha256.h"
 #include "prototypes.h"
+
 
 /**
 * @brief This is the main function which is the starting point of the program. It prints the menu to the console and
@@ -33,35 +36,25 @@
 */
 int main() {
 
-    //Vectors are declared.
-    std::vector<std::string> products;
-    std::vector<std::string> production_records;
-    std::vector<std::string> usernames;
-    std::vector<std::string> salts;
-    std::vector<std::string> user_passwords;
-
-    //Production and serial numbers are declared.
-    int audio_serial_num = 1;
-    int audio_mobile_serial_num = 1;
-    int visual_serial_num = 1;
-    int visual_mobile_serial_num = 1;
+    std::vector<Production_Record> prod_record;
+    std::vector<Product> products;
+    std::vector<User> users;
+    Statistics stats;
 
     //Loads existing products and production records if the respective text files exist, user info, and serial numbers.
-    load_existing_data(products, production_records, usernames, salts, user_passwords, audio_serial_num,
-                       audio_mobile_serial_num,
-                       visual_serial_num, visual_mobile_serial_num);
+    load_existing_data(products, prod_record, stats, users);
 
     //Welcome message printed to the console.
     std::cout << "Welcome to the Production Line Tracker!\n";
 
     //If usernames is not empty, then authenticate is called to confirm employee ID. Otherwise, administrator registers
     // a master account.
-    if (!usernames.empty())
-        authenticate(usernames, salts, user_passwords);
+    if (!users.empty())
+        authenticate(users);
     else {
 
         std::cout << "Administrator registration\n";
-        add_employee_account(usernames, salts, user_passwords);
+        add_employee_account(users);
     }
 
     //Declare and initialize program_is_running as a flag bool for the while loop.
@@ -71,15 +64,14 @@ int main() {
     while (program_is_running) {
 
         //The loop calls prompt_menu_choice until the function returns false, which only occurs when the user enters 6.
-        program_is_running = prompt_menu_choice(products, production_records, usernames, salts, user_passwords,
-                                                audio_serial_num, audio_mobile_serial_num,
-                                                visual_serial_num, visual_mobile_serial_num);
+        program_is_running = prompt_menu_choice(
+                products, prod_record,
+                stats, users);
     }
     return 0;
 }
 
-void authenticate(std::vector<std::string> &usernames, std::vector<std::string> &salts,
-                  std::vector<std::string> &user_passwords) {
+void authenticate(std::vector<User> &users) {
 
     bool user_is_valid = false;
     int user_index = 0;
@@ -95,8 +87,8 @@ void authenticate(std::vector<std::string> &usernames, std::vector<std::string> 
 
             //Iterates through the usernames vector and checks if the input is the same as an element and sets
             // user_index to the index where the input matches.
-            for (int index = 0; index < usernames.size(); index++) {
-                if (usernames[index] == input_username) {
+            for (int index = 0; index < users.size(); index++) {
+                if (users[index].username == input_username) {
                     user_is_valid = true;
                     user_index = index;
                     break;
@@ -118,13 +110,13 @@ void authenticate(std::vector<std::string> &usernames, std::vector<std::string> 
 
         //Prepends the user's randomly generated salt, encrypts the string with a Caesar cipher, and is sent through
         // the hash function.
-        input_password = sha256(encrypt_string(salts[user_index] + input_password));
+        input_password = sha256(encrypt_string(users[user_index].salt + input_password));
 
         //If the string stored in input_password is equal to the stored hashed password, then user_is_valid is set to
         // true, and the user continues to the program.
-        if (user_passwords[user_index] == input_password) {
+        if (users[user_index].password == input_password) {
 
-            std::cout << "Welcome back, " + usernames[user_index] + "!" << std::endl;
+            std::cout << "Welcome back, " + users[user_index].username + "!" << std::endl;
             user_is_valid = true;
 
         } else {
@@ -136,89 +128,103 @@ void authenticate(std::vector<std::string> &usernames, std::vector<std::string> 
     } while (!user_is_valid);
 }
 
-void load_existing_data(std::vector<std::string> &products, std::vector<std::string> &production_records,
-                        std::vector<std::string> &usernames, std::vector<std::string> &salts,
-                        std::vector<std::string> &user_passwords,
-                        int &audio_serial_num, int &audio_mobile_serial_num, int &visual_serial_num,
-                        int &visual_mobile_serial_num) {
+void load_existing_data(
+        std::vector<Product> &products,
+        std::vector<Production_Record> &prod_record, Statistics &stats, std::vector<User> &users) {
 
     //Existing products are added to vector named products from catalog.txt if the file exists already
     std::string next_line;
-    std::ifstream current_catalog_file("catalog.txt");
-
+    std::ifstream current_catalog_file("ProductLine.csv");
     //If catalog.txt exists then existing products are printed, otherwise it is printed that the catalog is empty.
     if (current_catalog_file.is_open()) {
 
+        std::stringstream s_str;
+        std::string specs_and_type;
+
         //Adds each line to the product catalog vector.
         while (getline(current_catalog_file, next_line)) {
-            products.push_back(next_line);
+            Product next_product;
+            s_str << next_line << std::endl;
+            next_product.product_info = next_line;
+            s_str >> next_product.manufacturer;
+            s_str >> next_product.prod_name;
+
+            getline(s_str, specs_and_type);
+            next_product.product_specs = specs_and_type.substr(0, specs_and_type.size() - 2);
+            next_product.item_type_code = specs_and_type.substr(specs_and_type.size() - 2, 2);
+
+            products.emplace_back(next_product);
         }
     }
     current_catalog_file.close();
 
-    std::ifstream production_file("production.txt");
+    Production_Record record;
+    std::ifstream production_file("ProductionLog.csv");
 
     //If production.txt exists then these records are added line by line to the production_records vector.
     if (production_file.is_open()) {
+        std::stringstream s_str;
+        stats.audio_serial_num = 0;
+        stats.audio_mobile_serial_num = 0;
+        stats.visual_serial_num = 0;
+        stats.visual_mobile_serial_num = 0;
 
         //Adds each line to the product catalog vector.
         while (getline(production_file, next_line)) {
-            production_records.push_back(next_line);
+            s_str << next_line << std::endl;
+            s_str >> record.production_number;
+
+            std::string product_and_serial_num = s_str.str();
+            record.product = product_and_serial_num.substr(0, product_and_serial_num.size() - 11);
+            record.serial_num = product_and_serial_num.substr(product_and_serial_num.size() - 2, 10);
 
             //Increments the respective serial_num depending on the item type code found within each record.
             if (next_line.substr(next_line.length() - 7, 2) == "MM")
-                audio_serial_num += 1;
+                stats.audio_serial_num += 1;
             else if (next_line.substr(next_line.length() - 7, 2) == "AM")
-                audio_mobile_serial_num += 1;
+                stats.audio_mobile_serial_num += 1;
             else if (next_line.substr(next_line.length() - 7, 2) == "VI")
-                visual_serial_num += 1;
+                stats.visual_serial_num += 1;
             else if (next_line.substr(next_line.length() - 7, 2) == "VM")
-                visual_mobile_serial_num += 1;
+                stats.visual_mobile_serial_num += 1;
+
+            prod_record.emplace_back(record);
         }
+
+    } else {
+        stats.production_number = 1;
+        stats.audio_serial_num = 0;
+        stats.audio_mobile_serial_num = 0;
+        stats.visual_serial_num = 0;
+        stats.visual_mobile_serial_num = 0;
     }
+
+    stats.production_number = prod_record.size() + 1;
     production_file.close();
 
-    std::ifstream user_info_file("usernames.txt");
+    User next_user;
+    std::ifstream user_info_file("Users.txt");
+    std::stringstream s_str;
 
     //If usernames.txt exists then these records are added line by line to the usernames vector.
     if (user_info_file.is_open()) {
 
         //Adds each line to the product catalog vector.
         while (getline(user_info_file, next_line)) {
-            usernames.push_back(next_line);
+            s_str << next_line << std::endl;
+            s_str >> next_user.username;
+            s_str >> next_user.salt;
+            s_str >> next_user.password;
+            s_str >> next_user.access_level;
+            users.emplace_back(next_user);
         }
     }
     user_info_file.close();
-
-    std::ifstream salts_file("salts.txt");
-
-    //If userinfo.txt exists then these records are added line by line to the usernames vector.
-    if (salts_file.is_open()) {
-
-        //Adds each line to the product catalog vector.
-        while (getline(salts_file, next_line)) {
-            salts.push_back(next_line);
-        }
-    }
-    salts_file.close();
-
-    std::ifstream user_pw_file("userpws.txt");
-
-    //If userinfo.txt exists then these records are added line by line to the usernames vector.
-    if (user_pw_file.is_open()) {
-
-        //Adds each line to the product catalog vector.
-        while (getline(user_pw_file, next_line)) {
-            user_passwords.push_back(next_line);
-        }
-    }
-    user_pw_file.close();
 }
 
-bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::string> &production_records,
-                        std::vector<std::string> &usernames, std::vector<std::string> &salts,
-                        std::vector<std::string> &user_passwords, int &audio_serial_num, int &audio_mobile_serial_num,
-                        int &visual_serial_num, int &visual_mobile_serial_num) {
+bool prompt_menu_choice(
+        std::vector<Product> &products,
+        std::vector<Production_Record> &prod_record, Statistics &stats, std::vector<User> &users) {
 
     //Declare and initialize input_number which is used to hold number input by user.
     std::string input_text;
@@ -248,21 +254,20 @@ bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::str
     //Switch statement calls the corresponding function, or if the the user enters 6 the loop is broken.
     switch (input_number) {
         case 1:
-            produce_items(products, production_records, audio_serial_num, audio_mobile_serial_num, visual_serial_num,
-                          visual_mobile_serial_num);
+            produce_items(products, prod_record, stats);
             break;
         case 2:
             std::cin.ignore();
-            add_employee_account(usernames, salts, user_passwords);
+            add_employee_account(users);
             break;
         case 3:
             add_new_product(products);
             break;
         case 4:
-            display_production_statistics();
+            display_production_statistics(stats);
             break;
         case 5:
-            find_production_number(production_records);
+            find_production_number(prod_record);
             break;
         case 6:
             return false;
@@ -273,7 +278,7 @@ bool prompt_menu_choice(std::vector<std::string> &products, std::vector<std::str
     return true;
 }
 
-void show_catalog(std::vector<std::string> products) {
+void show_catalog(const std::vector<Product> &products) {
 
     //If catalog.txt exists then existing products are printed, otherwise it is printed that the catalog is empty.
     if (!products.empty()) {
@@ -282,15 +287,13 @@ void show_catalog(std::vector<std::string> products) {
 
         for (int counter = 0; counter < products.size(); counter++) {
 
-            std::cout << std::to_string(counter + 1) + ". " << products[counter] << std::endl;
+            std::cout << std::to_string(counter + 1) + ". " << products[counter].product_info << std::endl;
         }
 
     } else std::cout << "The product catalog is empty." << std::endl;
 }
 
-void produce_items(std::vector<std::string> &products, std::vector<std::string> &production_records,
-                   int &audio_serial_num, int &audio_mobile_serial_num, int &visual_serial_num,
-                   int &visual_mobile_serial_num) {
+void produce_items(std::vector<Product> &products, std::vector<Production_Record> &prod_record, Statistics &stats) {
 
     if (products.empty()) {
         std::cout << "The product catalog is empty. Please add a product to track production." << std::endl;
@@ -300,13 +303,11 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
     //Ignores the newline character read when the user presses enter/return.
     std::cin.ignore();
 
-    int production_number;
-    production_number = production_records.size() + 1;
-
     std::string entry_is_correct = "0";
     std::string product_choice;
     int choice_number = 0;
     int num_produced = 0;
+    Product chosen_product;
 
     //Iterates at least once, and the loop will repeat if the user enters zero when prompted to confirm the input
     // or if the user does not enter a number 1-4.
@@ -333,13 +334,13 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
                          "between 1 and " + std::to_string(products.size()) + "." << std::endl;
             continue;
         }
-        product_choice = products[(choice_number - 1)];
+        chosen_product = products[(choice_number - 1)];
 
         std::cout << "Please enter the number of items that were produced." << std::endl;
         std::cin >> num_produced;
 
         //Allows the user to confirm their choice. Loop continues if entry_is_correct is assigned 0 (false)
-        std::cout << "You chose " + product_choice + " and recorded that " +
+        std::cout << "You chose " + chosen_product.product_info + " and recorded that " +
                      std::to_string(num_produced) + " units were produced.\n"
                      + "If this is incorrect enter 0 to try again, or enter anything else \n"
                      + "to continue." << std::endl;
@@ -349,47 +350,44 @@ void produce_items(std::vector<std::string> &products, std::vector<std::string> 
 
     // Declares production_file_write object and opens production.txt. New text is appended.
     std::ofstream production_file_write;
-    production_file_write.open("production.txt", std::ios::app);
-
-    //Assigns respective substrings from the product_choice to construct the serial number string.
-    std::string item_type_code = product_choice.substr((product_choice.length() - 2), 2);
-    std::string manufacturer_substr = product_choice.substr(0, 3);
+    production_file_write.open("ProductionLog.csv", std::ios::app);
 
     //For loop prints product Info for each product
     for (int counter = 0; counter < num_produced; counter++) {
 
-        //product_info output string stream holds all product information to be written to production.txt
-        std::ostringstream product_info;
-        product_info << product_choice << " " << std::to_string(production_number++) << " ";
-
         /*
-         * Adds respective serial number to the product_info ostringstream object, serial number is 5 characters wide
+         * Adds respective serial number to the record ostringstream object, serial number is 5 characters wide
          * filled with zeros and added to the end of the first three letters of manufacturer and itemtypecode.
          */
+
+        Production_Record new_record;
+        new_record.product = chosen_product.product_info;
+        new_record.production_number = stats.production_number;
+
         std::ostringstream serial_num;
-        serial_num << manufacturer_substr << item_type_code;
+        serial_num << new_record.product.substr(0, 3) << chosen_product.item_type_code;
 
-        if (item_type_code == "MM")
-            serial_num << std::setfill('0') << std::setw(5) << std::to_string(audio_serial_num++);
-        else if (item_type_code == "AM")
-            serial_num << std::setfill('0') << std::setw(5) << std::to_string(audio_mobile_serial_num++);
-        else if (item_type_code == "VI")
-            serial_num << std::setfill('0') << std::setw(5) << std::to_string(visual_serial_num++);
-        else if (item_type_code == "VM")
-            serial_num << std::setfill('0') << std::setw(5) << std::to_string(visual_mobile_serial_num++);
+        if (chosen_product.item_type_code == "MM")
+            serial_num << std::setfill('0') << std::setw(5) << std::to_string(stats.audio_serial_num++);
+        else if (chosen_product.item_type_code == "AM")
+            serial_num << std::setfill('0') << std::setw(5) << std::to_string(stats.audio_mobile_serial_num++);
+        else if (chosen_product.item_type_code == "VI")
+            serial_num << std::setfill('0') << std::setw(5) << std::to_string(stats.visual_serial_num++);
+        else if (chosen_product.item_type_code == "VM")
+            serial_num << std::setfill('0') << std::setw(5) << std::to_string(stats.visual_mobile_serial_num++);
 
-        product_info << serial_num.str();
+        new_record.serial_num = serial_num.str();
 
         //Outputs a string from the product_info object on each iteration, and writes it to production.txt
-        production_records.push_back(product_info.str());
-        production_file_write << production_records[production_records.size() - 1] << std::endl;
+        prod_record.emplace_back(new_record);
+        production_file_write << stats.production_number++ << " " << new_record.product
+                              << " " + new_record.serial_num << std::endl;
     }
     production_file_write.close();
     std::cout << "Production record has been saved to file." << std::endl;
 }
 
-void add_employee_account(std::vector<std::string> &usernames, std::vector<std::string> &salts,
-                          std::vector<std::string> &user_passwords) {
+void add_employee_account(std::vector<User> &users) {
 
     std::string first_name;
     std::string last_name;
@@ -434,43 +432,39 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
             continue;
         }
 
-        username_valid = false;
-        is_digit = false;
-        is_space = false;
-        is_not_alpha = false;
+        do {
+            username_valid = false;
 
-        try {
+            is_space = false;
+            is_not_alpha = false;
+            try {
 
-            std::cout << "\nPlease enter your last name. For example, Smith\n";
-            std::getline(std::cin, last_name);
+                std::cout << "\nPlease enter your last name. For example, Smith\n";
+                std::getline(std::cin, last_name);
 
-            //Iterates through each character of first_name checking if the character is a digit, space, or special ch.
-            for (char next_char : last_name) {
-                if (!is_digit && isdigit(next_char))
-                    is_digit = true;
-                else if (!is_space && isspace(next_char))
-                    is_space = true;
-                else if (!is_not_alpha && !isalnum(next_char))
-                    is_not_alpha = true;
+                //Iterates through each character of first_name checking if the character is a digit, space, or special ch.
+                for (char next_char : last_name) {
+                    if (!is_space && isspace(next_char))
+                        is_space = true;
+                    else if (!is_not_alpha && !isalnum(next_char))
+                        is_not_alpha = true;
+                }
+
+                if (is_space || is_not_alpha)
+                    throw std::exception();
+                else
+                    username_valid = true;
+
+            } catch (std::exception &ex) {
+                if (is_space)
+                    std::cout << "\nYour last name cannot contain a space.\n";
+                if (is_not_alpha)
+                    std::cout << "\nYour last name cannot contain a special character.\n";
+                continue;
             }
-
-            if (is_digit || is_space || is_not_alpha)
-                throw std::exception();
-            else
-                username_valid = true;
-
-        } catch (std::exception &ex) {
-            if (is_digit)
-                std::cout << "\nYou accidentally typed a number in your last name.\n";
-            if (is_space)
-                std::cout << "\nYour last name cannot contain a space.\n";
-            if (is_not_alpha)
-                std::cout << "\nYour last name cannot contain a special character.\n";
-            continue;
-        }
+        } while (!username_valid);
 
     } while (!username_valid);
-
 
     // Takes first letter of first_name and changes to lowercase.
     char first_letter = tolower(first_name[0]);
@@ -478,10 +472,25 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     // Changes last_name to all lowercase.
     std::transform(last_name.begin(), last_name.end(), last_name.begin(), tolower);
 
+    User new_user;
     // create user name in proper format
-    std::string user_name = first_letter + last_name;
+    bool is_not_duplicate = false;
+    for (User next_user : users) {
+        if (next_user.username == first_letter + last_name) {
+            std::cout << "The username " << (first_letter + last_name) << " is already in use. Please try again by \n"
+                                                                          "adding a number to your last name."
+                      << std::endl;
+            add_employee_account(users);
+            return;
+        } else {
+            is_not_duplicate = true;
+        }
+    }
 
-    std::cout << "User name: " + user_name << std::endl;
+    if (is_not_duplicate)
+        new_user.username = first_letter + last_name;
+
+    std::cout << "User name: " + new_user.username << std::endl;
 
     bool password_is_incorrect;
     std::string pw_str;
@@ -531,9 +540,9 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
             std::cout << "Your password has been saved." << std::endl;
             break;
         }
-        std::cout << ((space_is_found || special_is_found)
-                      ? "The password cannot contain spaces or special characters.\n" : "");
-
+        std::cout
+                << ((space_is_found || special_is_found) ? "The password cannot contain spaces or special characters.\n"
+                                                         : "");
         std::cout << (!digit_is_found ? "The password did not contain a digit.\n" : "");
         std::cout << (!upper_is_found ? "The password did not contain an uppercase letter.\n" : "");
         std::cout << (!lower_is_found ? "The password did not contain a lowercase letter.\n" : "");
@@ -545,39 +554,28 @@ void add_employee_account(std::vector<std::string> &usernames, std::vector<std::
     //Generates pseudo-random salt.
     std::random_device rd;
     srand(rd());
-    std::string salt;
-    salt = std::to_string((ULLONG_MAX / rd()));
-    salts.push_back(salt);
+    new_user.salt = std::to_string((ULLONG_MAX / rd()));
 
-    // Declares salts_file object and opens salts.txt. New text is appended.
-    std::ofstream salts_file;
-    salts_file.open("salts.txt", std::ios::app);
+    //Prepends salt to pw_str, encrypts, then runs through hash function.
+    pw_str = encrypt_string(new_user.salt + pw_str);
+    pw_str = sha256(pw_str);
+    new_user.password = pw_str;
+    pw_str = " ";
 
-    salts_file << salt << std::endl;
-
-    salts_file.close();
+    if (users.empty())
+        new_user.access_level = "admin";
+    else
+        new_user.access_level = "employee";
 
     // Declares userinfo_file object and opens userinfo.txt. New text is appended.
     std::ofstream userinfo_file;
-    userinfo_file.open("usernames.txt", std::ios::app);
+    userinfo_file.open("Users.txt", std::ios::app);
 
-    userinfo_file << user_name << std::endl;
+    userinfo_file << new_user.username << " " << new_user.salt << " " << new_user.password << " "
+                  << new_user.access_level << std::endl;
 
     userinfo_file.close();
-    usernames.push_back(user_name);
-
-    //Prepends salt to pw_str, encrypts, then runs through hash function.
-    pw_str = encrypt_string(salt + pw_str);
-    pw_str = sha256(pw_str);
-    user_passwords.push_back(pw_str);
-
-    // Declares pw_file object and opens userpws.txt. New text is appended.
-    std::ofstream pw_file;
-    pw_file.open("userpws.txt", std::ios::app);
-
-    pw_file << pw_str << std::endl;
-
-    pw_file.close();
+    users.emplace_back(new_user);
 }
 
 std::string encrypt_string(std::string str) {
@@ -589,30 +587,25 @@ std::string encrypt_string(std::string str) {
     }
 }
 
-void add_new_product(std::vector<std::string> &products) {
+void add_new_product(std::vector<Product> &products) {
 
     //prints the current catalog or let's the user know if it is empty.
     show_catalog(products);
 
     std::string entry_is_correct;
-    std::string manufacturer;
-    std::string prod_name;
-
     int item_type_choice = 0;
     std::string item_type_code;
     std::string item_type;
-
-    std::string product_specs;
-
+    Product new_product;
     do {
         //Ignores the newline character read when the user presses enter/return.
         std::cin.ignore();
 
         std::cout << "\n" << "Please enter the manufacturer." << std::endl;
-        std::getline(std::cin, manufacturer);
+        std::getline(std::cin, new_product.manufacturer);
 
         std::cout << "Please enter the product name." << std::endl;
-        std::getline(std::cin, prod_name);
+        std::getline(std::cin, new_product.prod_name);
 
         std::cout << "Please enter the number next to the product's item type\n";
         std::cout << "1. Audio (MM)\n" <<
@@ -652,36 +645,39 @@ void add_new_product(std::vector<std::string> &products) {
                 std::cout << "Your input was invalid. Please try again." << std::endl;
                 continue;
         }
+        new_product.item_type_code = item_type_code;
 
         // ProductSpecs is set depending on item_type_choice calling either add_music_player or addMoviePLayer.
         if (item_type_choice == 1 || item_type_choice == 3)
-            product_specs = add_music_player();
+            new_product.product_specs = add_music_player();
         else
-            product_specs = add_movie_player();
+            new_product.product_specs = add_movie_player();
 
         //Allows the user to confirm their choice. Loop continues if entry_is_correct is assigned 0 (false)
         std::cout
-                << "You entered " + manufacturer + " " + prod_name + " " + product_specs + " " + item_type_code
-                   + ": " + item_type + ". If this is incorrect enter 0 to try again, or enter anything else\n"
-                   + "to continue." << std::endl;
+                << "You entered " + new_product.manufacturer + " " + new_product.prod_name + " " +
+                   new_product.product_specs + " " + new_product.item_type_code + ": " + item_type + ".\n"
+                   + "If this is incorrect enter 0 to try again, or enter anything else to continue." << std::endl;
 
         std::cin >> entry_is_correct;
 
     } while (entry_is_correct == "0");
 
     //new_product string is set by concatenating manufacturer prod_name item_type_code
-    std::string new_product = manufacturer + " " + prod_name + " " + product_specs + " " + item_type_code;
+    new_product.product_info =
+            new_product.manufacturer + " " + new_product.prod_name + " " + new_product.product_specs + " " +
+            new_product.item_type_code;
 
     //new_product string is appended to catalog.txt file
     std::ofstream catalog_file;
-    catalog_file.open("catalog.txt", std::ios::app);
-    catalog_file << new_product << std::endl;
+    catalog_file.open("ProductLine.csv", std::ios::app);
+    catalog_file << new_product.product_info << std::endl;
     catalog_file.close();
 
-    std::cout << new_product << " has been added to the product catalog.\n" << std::endl;
+    std::cout << new_product.product_info << " has been added to the product catalog.\n" << std::endl;
 
     //new_product string is added to the product vector.
-    products.push_back(new_product);
+    products.emplace_back(new_product);
 
     //Selection sort of available products by name when a new product is added.
     std::string minimum_string;
@@ -690,20 +686,20 @@ void add_new_product(std::vector<std::string> &products) {
 
         //Finds minimum element in unsorted subarray
         int minimum_index = unsorted_boundary;
-        minimum_string = products[unsorted_boundary];
+        minimum_string = products[unsorted_boundary].manufacturer;
         for (int unsorted_index = unsorted_boundary + 1; unsorted_index < products.size(); unsorted_index++) {
 
-            if (minimum_string.compare(products[unsorted_index]) > 0) {
-                minimum_string = products[unsorted_index];
+            if (minimum_string.compare(products[unsorted_index].manufacturer) > 0) {
+                minimum_string = products[unsorted_index].manufacturer;
                 minimum_index = unsorted_index;
             }
         }
 
         //Swaps the found minimum element with the first element of subarray
         if (minimum_index != unsorted_boundary) {
-            temp = products[unsorted_boundary];
-            products[unsorted_boundary] = products[minimum_index];
-            products[minimum_index] = temp;
+            temp = products[unsorted_boundary].manufacturer;
+            products[unsorted_boundary].manufacturer = products[minimum_index].manufacturer;
+            products[minimum_index].manufacturer = temp;
         }
     }
 }
@@ -752,7 +748,7 @@ std::string add_movie_player() {
         std::cout << "Please enter the number before the type of screen for this product.\n"
                      "1. LCD \n"
                      "2. LED \n"
-                     "3. OLED." << std::endl;
+                     "3. OLED" << std::endl;
         std::cin >> monitor_type;
 
         try {
@@ -790,13 +786,14 @@ std::string add_movie_player() {
     return movie_player_specs;
 }
 
-void display_production_statistics() {
+void display_production_statistics(const Statistics &stats) {
     std::cout << "Display Production Statistics Stub\n";
+
 }
 
-void find_production_number(std::vector<std::string> production_records) {
+void find_production_number(const std::vector<Production_Record> &prod_record) {
 
-    if (production_records.empty()) {
+    if (prod_record.empty()) {
         std::cout << "No products have been produced. Please choose \"Produce Items\" at the menu to track production\n"
                      "which will generate production numbers and serial numbers." << std::endl;
 
@@ -811,9 +808,9 @@ void find_production_number(std::vector<std::string> production_records) {
 
         //Iterates through the production record checking if the input serial number matches the substring of the
         // serial number within the production record.
-        for (int count = 0; count < production_records.size(); count++) {
+        for (int count = 0; count < prod_record.size(); count++) {
 
-            if (production_records[count].substr(production_records[count].length() - 10, 10) == input_serial_num) {
+            if (prod_record[count].serial_num == input_serial_num) {
                 std::cout << "The production number for the serial number you entered is " + std::to_string(count + 1);
                 serial_num_found = true;
             }
