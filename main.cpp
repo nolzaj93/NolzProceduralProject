@@ -2,7 +2,8 @@
  *  @brief This file is C++ source code for the COP2001 Procedural Project.
  *
  * The Production Line Tracker requires a valid username and password to enter the program. The user is
- * given the option at the menu to add a new product to the production line, add employe
+ * given the option at the menu to add a new product to the production line, add employee, add a new product
+ * to the catalog, display production statistics, or find a production number.
  *
  *  @author Austin Nolz
  *  @bug - No known bugs currently.
@@ -446,7 +447,7 @@ void add_employee_account(std::vector<User> &users) {
         }
 
         do {
-            //Last name is not checked for digits so that users with duplicate usernames can use digits.
+            //Last name is not checked for digits so that users with duplicate user names can use digits.
             //It is
             last_name_valid = false;
             is_space = false;
@@ -579,15 +580,15 @@ void add_employee_account(std::vector<User> &users) {
     else
         new_user.access_level = "employee";
 
-    // Declares userinfo_file object and opens userinfo.txt. New text is appended.
-    std::ofstream userinfo_file;
-    userinfo_file.open("Users.txt", std::ios::app);
+    // Declares user_info_file object and opens Users.txt. New text is appended.
+    std::ofstream user_info_file;
+    user_info_file.open("Users.txt", std::ios::app);
 
     //Writes to users.txt the contents of new_user separated by spaces.
-    userinfo_file << new_user.username << " " << new_user.salt << " " << new_user.password << " "
+    user_info_file << new_user.username << " " << new_user.salt << " " << new_user.password << " "
                   << new_user.access_level << std::endl;
 
-    userinfo_file.close();
+    user_info_file.close();
     users.emplace_back(new_user);
 }
 

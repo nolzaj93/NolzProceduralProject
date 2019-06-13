@@ -20,7 +20,7 @@
 - Able to enter how many of the products were produced.
 - A record should be output that displays the production number, manufacturer, product name, item type and serial number. 
 - ProductionNumber should be unique, sequential for all products, and automatically assigned.
-- The SerialNumber should start with the first thre letters of the Manufacturer, two letter itemType code, then five digits (leading 0s if necessary that are unique and sequential for the item type. The entire Serial Number should be automatically assigned.
+- The SerialNumber should start with the first three letters of the Manufacturer, two letter itemType code, then five digits (leading 0s if necessary that are unique and sequential for the item type. The entire Serial Number should be automatically assigned.
 
 ## Sprint 3 - Arrays and Vectors, Searching and Sorting
 
@@ -48,7 +48,7 @@
 ### 1. Store product line, production records, and production statistics in structs.
 ### 2. Save products that can be produced to a text file named ProductLine.csv
 ### 3. Save the production log to a text file name ProductionLog.csv
-### 4. Save the usernames and encrypted passwords to a text file name Users.txt
+### 4. Save the user names and encrypted passwords to a text file name Users.txt
 ### 5. Load data from the files into vectors of structs when the program starts.
 
 ## Sprint 6 - Quality Analysis
