@@ -274,7 +274,7 @@ void find_production_number(const std::vector<Production_Record> &);
  * @brief Sorts the products within the product line alphabetically by comparing the manufacturer strings.
  *
  * This function uses a selection sort to put the products vector in ascending order (A - z). This function is called
- *
+ * after a new product is added.
  *
  * @param products - A vector of type Product which holds the product line information.
  * @return void

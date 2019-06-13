@@ -23,8 +23,9 @@
 
 
 /**
-* @brief This is the main function which is the starting point of the program. It prints the menu to the console and
-*        allows the user to enter a number which will run a respective function.
+* @brief This is the main function which is the starting point of the program. It calls the method prompt_menu_choice()
+* which prints the menu to the console and allows the user to enter a number which will run a respective function.
+* This method is called repeatedly until it returns false when the user enters 6 to exit.
 *
 * The products and production_records vectors are initialized here. If catalog.txt already exists then all products
 * are added to the products vector, then if production.txt exists then all of the production records are added to
@@ -277,6 +278,8 @@ bool prompt_menu_choice(
 }
 
 void show_catalog(std::vector<Product> &products) {
+
+    selection_sort(products);
 
     //If ProductionLine.csv has been read and products has been loaded the catalog will be printed, otherwise
     // it is printed that the catalog is empty.
@@ -689,16 +692,9 @@ void add_new_product(std::vector<Product> &products) {
 
     //new_product string is added to the product vector.
     products.emplace_back(new_product);
-
-    selection_sort(products);
 }
 
 std::string add_music_player() {
-
-    /*
-     * Music Players store AudioSpecification (the file format, like wav or mp3)
-     * and MediaType (what stores the audio file like CD, DVD, Blu-Ray), both input by the user.
-     */
 
     //Clears the newline character from the previous choice within addNewProduct()
     std::cin.ignore();
@@ -721,10 +717,6 @@ std::string add_music_player() {
 
 std::string add_movie_player() {
 
-    /*
-     * Movie Players store MonitorType, which is a Screen.
-     * Screen stores: resolution, refresh rate, response time.
-     */
     std::string monitor_type;
     int screen_choice;
     std::string entry_is_correct;
@@ -786,6 +778,7 @@ void display_production_statistics(const Statistics &stats, std::vector<Product>
               << std::endl;
     std::cout << "Total visual units produced: " << (stats.visual_serial_num + stats.visual_mobile_serial_num)
               << std::endl;
+
     bool input_is_valid = false;
     do {
         std::cout
@@ -793,12 +786,13 @@ void display_production_statistics(const Statistics &stats, std::vector<Product>
                 << std::endl;
         std::string input;
         std::cin >> input;
+
         if (input == "1") {
             input_is_valid = true;
-            selection_sort(products);
             show_catalog(products);
         } else if (input == "2") {
             input_is_valid = true;
+
             if (prod_record.empty()) {
                 std::cout << "The production log is empty. Enter 1 at the menu to add to the production log."
                           << std::endl;
@@ -807,10 +801,10 @@ void display_production_statistics(const Statistics &stats, std::vector<Product>
             for (const Production_Record &record : prod_record) {
                 std::cout << record.production_number << " " << record.product << " " << record.serial_num << std::endl;
             }
+
         } else {
             std::cout << "Your input was not either 1 or 2. Please try again." << std::endl;
         }
-
     } while (!input_is_valid);
 }
 
