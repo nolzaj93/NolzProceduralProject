@@ -10,12 +10,40 @@
 #ifndef COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 #define COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
 
+/**
+ * @brief This type describes a single record within the ProductionLog/prod_record vector.
+ *
+ * A vector of this type is declared in main and passed by reference to load_existing_data(), where the vector reads
+ * ProductionLog.csv if it exists. It is passed by reference to prompt_menu_choice(), then sent by reference to
+ * produce_items() or passed by constant reference to find_production_number().
+ *
+ * @var production_number - The total number of units tracked by the factory, and equivalent to production number in
+ *                          Statistics.
+ * @var product - String containing all details and specifications about the product.
+ * @var serial_num - String containing first three letters of the manufacturer name, item type code, and 5 digit
+ *                   item specific serial count.
+ */
 struct Production_Record {
     int production_number;
     std::string product;
     std::string serial_num;
 };
 
+/**
+ * @brief Product is the type of each element in the vector named products, which is a collection holding the catalog
+ * saved to ProductLine.csv.
+ *
+ * A vector of this type named products is declared in main and passed first by reference to load_existing_data to
+ * read and append each product of the product line to the vector. The vector is passed to prompt_menu_choice,
+ * then to either produce_items() as a constant reference and to show_catalog(), or to add_new_product() by reference.
+ *
+ * @var manufacturer - String holding the manufacturer of the product.
+ * @var prod_name - String with name of the product.
+ * @var item_type_code - Two letter string designating item type - (MM AM VI VM)
+ * @var product_specs - String containing any product specifications.
+ * @var product_info - A concatenated string to be used in the production records.
+ *
+ */
 struct Product {
     std::string manufacturer;
     std::string prod_name;
@@ -24,6 +52,22 @@ struct Product {
     std::string product_info;
 };
 
+/**
+ * @brief A struct which is instantiated for each new employee added, and the instance is then added to the users
+ * vector in main.
+ *
+ * A vector of this type is declared in main named users and passed first to load_existing_data(). Users.txt is read
+ * and each instance of a User is initialized and added to the users vector. If no users have been created, then
+ * we can't call authenticate() because users is empty. We then call add_employee_account to add the administrator
+ * credentials.
+ *
+ * @var username - All lowercase, first letter of first name concatenated with last name. If there are duplicate user
+ *                 is prompted to add a number to the end of their name.
+ * @var salt - A pseduo-randomly generated big number prepended to the password before encryption.
+ * @var password - The hashed result of the string (salt + password)
+ * @var access_level - First user to run the program has admin level, and all others are employee level.
+ *
+ */
 struct User {
     std::string username;
     std::string salt;
@@ -31,6 +75,25 @@ struct User {
     std::string access_level;
 };
 
+/**
+ * @brief Statistics is instantiated once to hold the production and serial number counts to add to the
+ * production record.
+ *
+ * The only instance is initialized in main to the starting values, then passed by reference to load_existing_data().
+ * The ProductionLog.csv file is read line by line and the item type code substring is compared to each item type code.
+ * The respective serial num is incremented for each production record, and the production number is set to the
+ * prod_record vector size + 1. The instance stats is passed by reference to prompt_menu_choice() where it is again
+ * passed by reference to produce_items(), and by constant reference to display_production_statistics().
+ *
+ * @var production_number - The production number count is the overall unit production number including all item types
+ *                            which is prepended to the record.
+ * @var audio_serial_num - The audio type serial count is appended to the audio (MM) type production records.
+ * @var audio_mobile_serial_num - The audio mobile type serial count is appended to the audio mobile (AM) type
+ *                                  production records.
+ * @var visual_serial_num - The visual type serial count is appended to the visual(VI) type production records.
+ * @var visual_mobile_serial_num - The visual mobile type serial count is appended to the visual mobile (VM)
+ *                                 type production records.
+ */
 struct Statistics {
     int production_number;
     int audio_serial_num;
@@ -40,7 +103,8 @@ struct Statistics {
 };
 
 /**
- * @brief This function only allows the user to continue to the program if the username and password matches.
+ * @brief This function only allows the user to continue to the program if the username and password matches with is
+ * stored in the users vector.
  *
  * If the users vector is empty, then add_employee_account is called, which creates the first user with access level
  * set to "admin". The user is required to authenticate if the vector is not empty, which prompts the user for the
@@ -99,7 +163,7 @@ bool prompt_menu_choice(std::vector<Product> &, std::vector<Production_Record> &
  *                  specs, and product_info which concatenates all info together.
  * @return void
  */
-void show_catalog(const std::vector<Product> &);
+void show_catalog(std::vector<Product> &);
 
 
 /**
@@ -184,9 +248,13 @@ std::string add_movie_player();
  * This function will eventually print production statistics to the user, like total number of units tracked, as well
  * as number of units tracked for each item type.
  *
+ * @param stats - Instance of struct named statistics holding counts for production and serial numbers.
+ * @param products - Vector of type Product holding the details of each product in the product line.
+ * @param prod_record - Vector of type Production_Record which holds a record of each unit produced in the factory.
  * @return void
  */
-void display_production_statistics(const Statistics&);
+void display_production_statistics(const Statistics &, std::vector<Product> &,
+                                   const std::vector<Production_Record> &);
 
 /**
  * @brief User inputs a serial number and the respective production number is output.
@@ -201,5 +269,16 @@ void display_production_statistics(const Statistics&);
  * @return void
  */
 void find_production_number(const std::vector<Production_Record> &);
+
+/**
+ * @brief Sorts the products within the product line alphabetically by comparing the manufacturer strings.
+ *
+ * This function uses a selection sort to put the products vector in ascending order (A - z). This function is called
+ *
+ *
+ * @param products - A vector of type Product which holds the product line information.
+ * @return void
+ */
+void selection_sort(std::vector<Product> &);
 
 #endif //COP2001PROCEDURALPROJECT_MAINPROTOTYPES_H
