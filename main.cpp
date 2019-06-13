@@ -158,7 +158,6 @@ void load_existing_data(std::vector<Product> &products, std::vector<Production_R
     }
     current_catalog_file.close();
 
-
     std::ifstream production_file("ProductionLog.csv");
 
     //If ProductionLog.csv exists then these records are added line by line to the prod_records vector.
@@ -586,7 +585,7 @@ void add_employee_account(std::vector<User> &users) {
 
     //Writes to users.txt the contents of new_user separated by spaces.
     user_info_file << new_user.username << " " << new_user.salt << " " << new_user.password << " "
-                  << new_user.access_level << std::endl;
+                   << new_user.access_level << std::endl;
 
     user_info_file.close();
     users.emplace_back(new_user);
@@ -856,7 +855,6 @@ void selection_sort(std::vector<Product> &products) {
                 minimum_index = unsorted_index;
             }
         }
-
         //Swaps the found minimum element with the first element of subarray
         if (minimum_index != unsorted_boundary) {
             temp_product = products[unsorted_boundary];
