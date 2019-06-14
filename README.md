@@ -2,8 +2,9 @@
 
   This procedural project is a part of the COP2001 curriculum
 
-##Flowchart
+## Flowchart
 ![](FlowchartProceduralProject.pdf)
+
 ## Sprint 1 Backlog (SBL)
 
 ### 1. Output a greeting and menu in main.
