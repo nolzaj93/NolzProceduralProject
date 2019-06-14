@@ -22,7 +22,6 @@
 #include "sha256.h"
 #include "prototypes.h"
 
-
 /**
 * @brief This is the main function which is the starting point of the program. It calls the method prompt_menu_choice()
 * which prints the menu to the console and allows the user to enter a number which will run a respective function.
