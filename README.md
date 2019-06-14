@@ -3,7 +3,7 @@
   This procedural project is a part of the COP2001 curriculum
 
 ## Flowchart
-![](FlowchartProceduralProject.pdf)
+![](https://github.com/nolzaj93/NolzProceduralProject/blob/master/FlowchartProceduralProject.pdf)
 
 ## Sprint 1 Backlog (SBL)
 
