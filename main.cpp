@@ -603,7 +603,8 @@ std::string encrypt_string(std::string str) {
 void add_new_product(std::vector<Product> &products) {
 
     //prints the current catalog or let's the user know if it is empty.
-    show_catalog(products);
+    if (!products.empty())
+        show_catalog(products);
 
     std::string entry_is_correct;
     int item_type_choice = 0;
@@ -782,7 +783,8 @@ void display_production_statistics(const Statistics &stats, std::vector<Product>
     bool input_is_valid = false;
     do {
         std::cout
-                << "\nPlease enter 1 to see the current production catalog or enter 2 to print the entire production log."
+                << "\nPlease enter 1 to see the current production catalog or enter 2 to print the entire\n"
+                   "production log. Enter 3 to return to the menu."
                 << std::endl;
         std::string input;
         std::cin >> input;
@@ -790,6 +792,7 @@ void display_production_statistics(const Statistics &stats, std::vector<Product>
         if (input == "1") {
             input_is_valid = true;
             show_catalog(products);
+
         } else if (input == "2") {
             input_is_valid = true;
 
@@ -801,6 +804,9 @@ void display_production_statistics(const Statistics &stats, std::vector<Product>
             for (const Production_Record &record : prod_record) {
                 std::cout << record.production_number << " " << record.product << " " << record.serial_num << std::endl;
             }
+
+        } else if (input == "3") {
+            return;
 
         } else {
             std::cout << "Your input was not either 1 or 2. Please try again." << std::endl;
