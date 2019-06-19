@@ -3,8 +3,15 @@
  This procedural project is a part of the COP2001 curriculum
 
 ## Demonstration
-
+The first user enters credentials and is made an administrator. The
+username is set by the first letter of the first name concatenated with
+the last name in all lowercase. 
 ![](LoginAdminSetup.gif)
+
+New products can be added to the product catalog, unit production can
+be tracked, new employee login information can be set if they have a 
+unique username, production statistics can be displayed, and the user 
+is able to find the production number by entering a serial number.
 ![](ProceduralGif2.gif)
 
 ## Flowchart
