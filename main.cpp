@@ -1,12 +1,13 @@
-/** @file main.cpp
- *  @brief This file is C++ source code for the COP2001 Procedural Project.
+/**
+ * @file main.cpp
+ * @brief This file is C++ source code for the COP2001 Procedural Project.
  *
  * The Production Line Tracker requires a valid username and password to enter the program. The user is
  * given the option at the menu to add a new product to the production line, add employee, add a new product
  * to the catalog, display production statistics, or find a production number.
  *
- *  @author Austin Nolz
- *  @bug - No known bugs currently.
+ * @author Austin Nolz
+ * @bug - No known bugs currently.
  */
 
 #include <iostream>
@@ -35,8 +36,8 @@
 *
 * @return - If the program runs to completion then this function returns zero.
 */
-int main() {
 
+int main() {
     //Declare vectors of records, products and users. Initialize stats to starting values.
     std::vector<Production_Record> prod_record;
     std::vector<Product> products;
@@ -47,7 +48,7 @@ int main() {
     load_existing_data(products, prod_record, stats, users);
 
     //Welcome message printed to the console.
-    std::cout << "Welcome to the Production Line Tracker!\n";
+    std::cout << "\nWelcome to the Production Line Tracker!\n";
 
     //If users is not empty, then authenticate is called to confirm employee ID. Otherwise, administrator registers
     // a master account.
@@ -220,9 +221,8 @@ void load_existing_data(std::vector<Product> &products, std::vector<Production_R
     user_info_file.close();
 }
 
-bool prompt_menu_choice(
-        std::vector<Product> &products,
-        std::vector<Production_Record> &prod_record, Statistics &stats, std::vector<User> &users) {
+bool prompt_menu_choice(std::vector<Product> &products, std::vector<Production_Record> &prod_record, Statistics &stats,
+                        std::vector<User> &users) {
 
     //Declare and initialize input_number which is used to hold number input by user.
     std::string input_text;
@@ -294,8 +294,7 @@ void show_catalog(std::vector<Product> &products) {
     } else std::cout << "The product catalog is empty." << std::endl;
 }
 
-void produce_items(std::vector<Product> &products, std::vector<Production_Record> &prod_record,
-                   Statistics &stats) {
+void produce_items(std::vector<Product> &products, std::vector<Production_Record> &prod_record, Statistics &stats) {
 
     //If the products vector is empty, then the user is sent back to the menu to add a new product.
     if (products.empty()) {
@@ -555,8 +554,6 @@ void add_employee_account(std::vector<User> &users) {
         std::cout << (!digit_is_found ? "The password did not contain a digit.\n" : "");
         std::cout << (!upper_is_found ? "The password did not contain an uppercase letter.\n" : "");
         std::cout << (!lower_is_found ? "The password did not contain a lowercase letter.\n" : "");
-
-        std::cin.ignore();
 
     } while (password_is_incorrect);
 
