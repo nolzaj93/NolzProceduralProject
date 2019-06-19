@@ -1,6 +1,42 @@
 # NolzProceduralProject
 
  This procedural project is a part of the COP2001 curriculum
+# Project Title
+
+
+## Demonstration
+
+
+## Documentation
+
+
+## Diagrams
+
+
+## Getting Started
+
+
+## Built With
+
+
+## Contributing
+
+
+## Author
+
+
+## License
+
+
+## Acknowledgments
+
+
+## History
+
+
+## Key Programming Concepts Utilized
+
+
 
 ## Demonstration
 The first user enters credentials and is made an administrator. The
