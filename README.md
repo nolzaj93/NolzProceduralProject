@@ -7,6 +7,9 @@
 ![](LoginAdminSetup.gif)
 ![](ProceduralGif2.gif)
 
+## Flowchart
+![](FlowchartProceduralProject.png)
+
 ### Sprint 1 Backlog (SBL)
 
 ##### 1. Output a greeting and menu in main.
