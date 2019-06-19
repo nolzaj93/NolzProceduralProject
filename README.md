@@ -8,10 +8,7 @@ username is set by the first letter of the first name concatenated with
 the last name in all lowercase. 
 ![](LoginAdminSetup.gif)
 
-New products can be added to the product catalog, unit production can
-be tracked, new employee login information can be set if they have a 
-unique username, production statistics can be displayed, and the user 
-is able to find the production number by entering a serial number.
+The production line tracker allows the user to add new products to the product catalog, track production, register additional employees with a unique username and password, check production statistics, and to find the production number by entering a serial number.
 ![](ProceduralGif2.gif)
 
 ## Flowchart
