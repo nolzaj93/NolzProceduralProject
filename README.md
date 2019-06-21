@@ -1,40 +1,7 @@
-# NolzProceduralProject
+# FGCU COP2001 Procedural Project Summer A 2019
 
- This procedural project is a part of the COP2001 curriculum
-# Project Title
-
-
-## Demonstration
-
-
-## Documentation
-
-
-## Diagrams
-
-
-## Getting Started
-
-
-## Built With
-
-
-## Contributing
-
-
-## Author
-
-
-## License
-
-
-## Acknowledgments
-
-
-## History
-
-
-## Key Programming Concepts Utilized
+With this project we were tasked with creating a program to keep track of units produced on a production line. I made this program independently with about a year of experience programming and contributing a minimum of 5 hours per week. This project was part of the COP2001 Programming Methodology curriculum at FGCU to teach us the challenge and benefits of procedural programming. 
+ 
 
 
 
@@ -47,8 +14,61 @@ the last name in all lowercase.
 The production line tracker allows the user to add new products to the product catalog, track production, register additional employees with a unique username and password, check production statistics, and to find the production number by entering a serial number.
 ![](ProceduralGif2.gif)
 
-## Flowchart
+
+
+
+## Documentation
+
+
+## Diagrams
 ![](FlowchartProceduralProject.png)
+
+## Getting Started
+Set up your compiler and IDE, and to clone or download click the green button at the top of this page (https://github.com/nolzaj93/NolzProceduralProject), then click Open in Desktop or download ZIP then extract. An executable is coming soon.
+
+## Built With
+IDE - CLion 2019.1.3
+Compiler - GCC
+
+
+## Contributing
+
+
+## Author
+- Austin Nolz
+
+## License
+MIT License
+
+Copyright (c) 2019 Austin Nolz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Acknowledgments
+- Professor Scott Vanselow
+- John from Cave of Programming/Udemy
+
+## History
+The project started off structured with parallel vectors, and then was restructured to use vectors of user-defined data types called structs, which are like a class without methods.
+
+## Key Programming Concepts Utilized
+Abstraction, decomposition, procedural programming, functions, reference variables, salts, hash functions, primitive and abstract data types, vectors, structs, and input validation.
 
 ### Sprint 1 Backlog (SBL)
 
