@@ -74,6 +74,8 @@ SOFTWARE.
 ## Acknowledgments
 - Professor Scott Vanselow
 - John from Cave of Programming/Udemy
+- Olivier Gay and zedwood.com, sha256 hash function 
+- [Link](http://www.zedwood.com/article/cpp-sha256-function) 
 
 ## History
 The project started off structured with parallel vectors, and then was restructured to use vectors of user-defined data types called structs, which are like a class without methods.
