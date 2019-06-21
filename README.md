@@ -1,38 +1,49 @@
 # FGCU COP2001 Procedural Project Summer A 2019
 
-With this project we were tasked with creating a program to keep track of units produced on a production line. I made this program independently with about a year of experience programming and contributing a minimum of 5 hours per week. This project was part of the COP2001 Programming Methodology curriculum at FGCU to teach us the challenge and benefits of procedural programming. 
+With this project we were tasked with creating a program to keep track 
+of units produced on a production line. I made this program 
+independently with about a year of experience programming and
+contributing a minimum of 5 hours per week. This project was part of 
+the COP2001 Programming Methodology curriculum at FGCU to teach us the 
+challenge and benefits of procedural programming. 
  
-
-
-
 ## Demonstration
 The first user enters credentials and is made an administrator. The
 username is set by the first letter of the first name concatenated with
 the last name in all lowercase. 
 ![](LoginAdminSetup.gif)
 
-The production line tracker allows the user to add new products to the product catalog, track production, register additional employees with a unique username and password, check production statistics, and to find the production number by entering a serial number.
+The production line tracker allows the user to add new products to the
+product catalog, track production, register additional employees with 
+a unique username and password, check production statistics, and to 
+find the production number by entering a serial number.
 ![](ProceduralGif2.gif)
-
-
 
 
 ## Documentation
 
+Doxygen generated html:
+[Link](https://nolzaj93.github.io/NolzProceduralProject/html/)
 
 ## Diagrams
 ![](FlowchartProceduralProject.png)
 
 ## Getting Started
-Set up your compiler and IDE, and to clone or download click the green button at the top of this page (https://github.com/nolzaj93/NolzProceduralProject), then click Open in Desktop or download ZIP then extract. An executable is coming soon.
+Set up your compiler and IDE, and to clone or download click the green
+button at the top of 
+[this](https://github.com/nolzaj93/NolzProceduralProject) 
+page, then click Open in Desktop or download ZIP then extract.
+An executable is coming soon.
 
 ## Built With
 IDE - CLion 2019.1.3
+This program was tested and debugged primarily on macOS.  
 Compiler - GCC
-
 
 ## Contributing
 
+I could use some input on how to securely store user data in a database.
+Any improvements or suggestions are welcome.
 
 ## Author
 - Austin Nolz
