@@ -1,0 +1,102 @@
+This procedural project is a part of the C\+O\+P2001 curriculum
+
+\subsection*{Demonstration}
+
+The first user enters credentials and is made an administrator. The username is set by the first letter of the first name concatenated with the last name in all lowercase. 
+
+New products can be added to the product catalog, unit production can be tracked, new employee login information can be set if they have a unique username, production statistics can be displayed, and the user is able to find the production number by entering a serial number. 
+
+\subsection*{Flowchart}
+
+
+
+\subsubsection*{Sprint 1 Backlog (S\+BL)}
+
+\subparagraph*{1. Output a greeting and menu in main.}
+
+\subsubsection*{Sprint 2 Backlog (S\+BL) -\/ Conditions, Loops, Functions, Files intro.}
+
+\subparagraph*{1. Create a working menu}
+
+
+\begin{DoxyItemize}
+\item The only menu options necessary for this sprint are Log Production and Exit.
+\item Only accept values that are listed in the menu.
+\item If the user selects a different value, they are asked to choose again.
+\item Menus is printed from a show\+Menu function that is called from main.
+\item Menu choices result in calls to functions.
+\item After output of menu choice, show menu again until user chooses to exit. \subparagraph*{2. Add functionality to log production for the products from the previous sprint.}
+\end{DoxyItemize}
+
+
+\begin{DoxyItemize}
+\item The user should be able to choose which of the products was produced.
+\item Able to enter how many of the products were produced.
+\item A record should be output that displays the production number, manufacturer, product name, item type and serial number.
+\item Production\+Number should be unique, sequential for all products, and automatically assigned.
+\item The Serial\+Number should start with the first three letters of the Manufacturer, two letter item\+Type code, then five digits (leading 0s if necessary that are unique and sequential for the item type. The entire Serial Number should be automatically assigned.
+\end{DoxyItemize}
+
+\subsubsection*{Sprint 3 -\/ Arrays and Vectors, Searching and Sorting}
+
+\subparagraph*{1. Store the product line in a collection (parallel vectors).}
+
+
+\begin{DoxyItemize}
+\item Use code to populate some products.
+\item Allow the user to add products.
+\item All user to view the product line. \subparagraph*{2. When logging production, the user should be prompted to enter the product produced from the product line.}
+\end{DoxyItemize}
+
+\subparagraph*{3. Store the production log in a collection (parallel vectors).}
+
+\subparagraph*{4. Output the product line sorted by name.}
+
+\subparagraph*{5. Given a Serial Number, output the Production Number}
+
+\subsubsection*{Sprint 4 -\/ Pointers, Characters, Strings, Recursion}
+
+\subparagraph*{1. Create an Employee account.}
+
+
+\begin{DoxyEnumerate}
+\item Allow user to input full name in format First\+Name Last\+Name.
+\end{DoxyEnumerate}
+\begin{DoxyItemize}
+\item Generate user id, which is their first initial and surname in all lowercase
+\item Optional\+: Don\textquotesingle{}t allow duplicate user names.
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item Allow user to input a password.
+\end{DoxyEnumerate}
+\begin{DoxyItemize}
+\item The password must contain at least one digit, at least one lowercase letter, and at least one uppercase letter. The password cannot contain a space or any other symbols.
+\item Use a recursive function to encrypt the password. \subparagraph*{2. Optional\+: Require users to log in. Track which employee recorded production.}
+\end{DoxyItemize}
+
+\subsubsection*{Sprint 5 -\/ Data Structures, Structs, Files}
+
+\subparagraph*{1. Store product line, production records, and production statistics in structs.}
+
+\subparagraph*{3. Save the production log to a text file name Production\+Log.\+csv}
+
+\subparagraph*{4. Save the user names and encrypted passwords to a text file name Users.\+txt}
+
+\subparagraph*{5. Load data from the files into vectors of structs when the program starts.}
+
+\subsubsection*{Sprint 6 -\/ Quality Analysis}
+
+\subparagraph*{1. Output production statistics such as total number of items produced and number of items of each type.}
+
+\subparagraph*{2. Clear all warnings from Inspect Code.}
+
+\subparagraph*{3. Format code using standard style guidelines.}
+
+\subparagraph*{4. Enhance documentation\+:}
+
+
+\begin{DoxyItemize}
+\item Javadoc style comments for Doxygen
+\item Comments in code
+\item R\+E\+A\+D\+ME, create animated gif of program running \subparagraph*{5. Deployment}
+\end{DoxyItemize}

@@ -1,0 +1,332 @@
+\hypertarget{prototypes_8h}{}\section{/\+Users/austinnolz/\+C\+Lion\+Projects/\+Nolz\+Procedural\+Project/prototypes.h File Reference}
+\label{prototypes_8h}\index{/Users/austinnolz/CLionProjects/NolzProceduralProject/prototypes.h@{/Users/austinnolz/CLionProjects/NolzProceduralProject/prototypes.h}}
+
+
+This file is the header file which defines the function prototypes for the C\+O\+P2001 Procedural Project.  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}}
+\item 
+struct \mbox{\hyperlink{struct_product}{Product}}
+\item 
+struct \mbox{\hyperlink{struct_user}{User}}
+\item 
+struct \mbox{\hyperlink{struct_statistics}{Statistics}}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{prototypes_8h_a97b7ce9921a3caf56c8e8e97c5a9a5d5}{authenticate}} (std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em This function only allows the user to continue to the program if the username and password matches with is stored in the users vector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_a9a686a17fcb295e08254ff9cdfb3693b}{load\+\_\+existing\+\_\+data}} (std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&, std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&, \mbox{\hyperlink{struct_statistics}{Statistics}} \&, std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em The function loads existing data into the respective vectors if the files exists. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{prototypes_8h_a9c585fcd97675b23653147e85df62632}{prompt\+\_\+menu\+\_\+choice}} (std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&, std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&, \mbox{\hyperlink{struct_statistics}{Statistics}} \&, std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em This function prompts the user to enter a number to run a corresponding function from the menu printed to the screen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_a523861d4a6d7c8cdbbc6ba0d197ee561}{show\+\_\+catalog}} (std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em Prints the catalog to the console, and prints that the catalog is empty if no products have been added. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_a225d3afbaf74f1afc5fb3885624c44e7}{produce\+\_\+items}} (std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&, std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&, \mbox{\hyperlink{struct_statistics}{Statistics}} \&)
+\begin{DoxyCompactList}\small\item\em Allows the user to track the production of each product within the catalog by writing to the production.\+txt file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_a1897989b1dc920fcd1b90e429fe072e5}{add\+\_\+employee\+\_\+account}} (std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em Allows an administrator to add an employee account. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{prototypes_8h_a3e89b0128a59423f99d22b0aa3e1a5da}{encrypt\+\_\+string}} (std\+::string str)
+\begin{DoxyCompactList}\small\item\em Encrypts user passwords combined with a pseudo-\/random long long. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_af723c86f39187b2a448b9d0f44ff8dab}{add\+\_\+new\+\_\+product}} (std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em Allows the user to add a new product to the catalog by writing to the catalog.\+txt file. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{prototypes_8h_a10171ab4f66b02d382815f35cccbc39d}{add\+\_\+music\+\_\+player}} ()
+\begin{DoxyCompactList}\small\item\em This function adds a music player to the catalog. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{prototypes_8h_ae80c38ac221d327ffe87cd94ed918f25}{add\+\_\+movie\+\_\+player}} ()
+\begin{DoxyCompactList}\small\item\em This function adds a movie player to the catalog. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_ad1f81ebad0f5bc617856b14c2fd86971}{display\+\_\+production\+\_\+statistics}} (const \mbox{\hyperlink{struct_statistics}{Statistics}} \&, std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&, const std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em Displays productions statistics to the user. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_a5bf66ced179755f0558f72e2756c25ff}{find\+\_\+production\+\_\+number}} (const std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_user}{User}} inputs a serial number and the respective production number is output. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prototypes_8h_a9fc9383006a45a5a2072d478800e0cca}{selection\+\_\+sort}} (std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em Sorts the products within the product line alphabetically by comparing the manufacturer strings. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This file is the header file which defines the function prototypes for the C\+O\+P2001 Procedural Project. 
+
+The function prototypes are stored here and are defined within \mbox{\hyperlink{main_8cpp}{main.\+cpp}}.
+
+\begin{DoxyAuthor}{Author}
+Austin Nolz 
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000002}{Bug}}]
+\begin{DoxyItemize}
+\item No known bugs currently. 
+\end{DoxyItemize}\end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{prototypes_8h_a1897989b1dc920fcd1b90e429fe072e5}\label{prototypes_8h_a1897989b1dc920fcd1b90e429fe072e5}} 
+\index{prototypes.h@{prototypes.h}!add\_employee\_account@{add\_employee\_account}}
+\index{add\_employee\_account@{add\_employee\_account}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{add\_employee\_account()}{add\_employee\_account()}}
+{\footnotesize\ttfamily void add\+\_\+employee\+\_\+account (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Allows an administrator to add an employee account. 
+
+This function allows existing users to add an employee account. The passwords are \char`\"{}encrypted\char`\"{} with a cipher using encrypt\+\_\+string(str), then a unique pseudo-\/random salt value is prepended. This string is then hashed using \mbox{\hyperlink{class_s_h_a256}{S\+H\+A256}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em users} & -\/ Reference vector of type \mbox{\hyperlink{struct_user}{User}}, which holds username, salt, password, and access level.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_ae80c38ac221d327ffe87cd94ed918f25}\label{prototypes_8h_ae80c38ac221d327ffe87cd94ed918f25}} 
+\index{prototypes.h@{prototypes.h}!add\_movie\_player@{add\_movie\_player}}
+\index{add\_movie\_player@{add\_movie\_player}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{add\_movie\_player()}{add\_movie\_player()}}
+{\footnotesize\ttfamily std\+::string add\+\_\+movie\+\_\+player (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This function adds a movie player to the catalog. 
+
+This function is called from the add\+\_\+new\+\_\+product function and returns the specifications of that product. The user is prompted to enter the monitor type, then prompted to enter the screen\textquotesingle{}s specifications. These two inputs are concatenated and returned to the add\+\_\+new\+\_\+product function.
+
+\begin{DoxyReturn}{Returns}
+Sends the Movie Player specifications to the add\+New\+Product function to be added to product\+Info. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a10171ab4f66b02d382815f35cccbc39d}\label{prototypes_8h_a10171ab4f66b02d382815f35cccbc39d}} 
+\index{prototypes.h@{prototypes.h}!add\_music\_player@{add\_music\_player}}
+\index{add\_music\_player@{add\_music\_player}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{add\_music\_player()}{add\_music\_player()}}
+{\footnotesize\ttfamily std\+::string add\+\_\+music\+\_\+player (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This function adds a music player to the catalog. 
+
+This function is called from the add\+\_\+new\+\_\+product function and returns the specifications of that product. The user is first prompted to enter the supported file formats and then is prompted to enter the media type.
+
+\begin{DoxyReturn}{Returns}
+Sends the Music Player specifications to the add\+\_\+new\+\_\+product function to be added to product\+Info. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_af723c86f39187b2a448b9d0f44ff8dab}\label{prototypes_8h_af723c86f39187b2a448b9d0f44ff8dab}} 
+\index{prototypes.h@{prototypes.h}!add\_new\_product@{add\_new\_product}}
+\index{add\_new\_product@{add\_new\_product}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{add\_new\_product()}{add\_new\_product()}}
+{\footnotesize\ttfamily void add\+\_\+new\+\_\+product (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Allows the user to add a new product to the catalog by writing to the catalog.\+txt file. 
+
+This function allows the user to add a new product to the catalog. The user is prompted to enter the manufacturer, product name, item type, and depending on item type either add\+Music\+Player or add\+Movie\+Player is called to add product specifications. If the user confirms the information they entered is correct, then the new product is added to the products vector and written to catalog.\+txt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em products} & -\/ Reference vector of type \mbox{\hyperlink{struct_product}{Product}}, which holds manufacturer, product name, item type code, product specs, and product\+\_\+info which concatenates all info together. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a97b7ce9921a3caf56c8e8e97c5a9a5d5}\label{prototypes_8h_a97b7ce9921a3caf56c8e8e97c5a9a5d5}} 
+\index{prototypes.h@{prototypes.h}!authenticate@{authenticate}}
+\index{authenticate@{authenticate}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{authenticate()}{authenticate()}}
+{\footnotesize\ttfamily void authenticate (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+This function only allows the user to continue to the program if the username and password matches with is stored in the users vector. 
+
+If the users vector is empty, then add\+\_\+employee\+\_\+account is called, which creates the first user with access level set to \char`\"{}admin\char`\"{}. The user is required to authenticate if the vector is not empty, which prompts the user for the username and password. The username contains first syllable of first name and all of last in all lowercase, and the Password must contain at least one uppercase, one lowercase, and one digit with no spaces or special characters.
+
+
+\begin{DoxyParams}{Parameters}
+{\em users} & -\/ Reference vector of type \mbox{\hyperlink{struct_user}{User}}, which holds username, salt, password, and access level. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{prototypes_8h_ad1f81ebad0f5bc617856b14c2fd86971}\label{prototypes_8h_ad1f81ebad0f5bc617856b14c2fd86971}} 
+\index{prototypes.h@{prototypes.h}!display\_production\_statistics@{display\_production\_statistics}}
+\index{display\_production\_statistics@{display\_production\_statistics}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{display\_production\_statistics()}{display\_production\_statistics()}}
+{\footnotesize\ttfamily void display\+\_\+production\+\_\+statistics (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_statistics}{Statistics}} \&}]{,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{,  }\item[{const std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Displays productions statistics to the user. 
+
+This function will eventually print production statistics to the user, like total number of units tracked, as well as number of units tracked for each item type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & -\/ Instance of struct named statistics holding counts for production and serial numbers. \\
+\hline
+{\em products} & -\/ Vector of type \mbox{\hyperlink{struct_product}{Product}} holding the details of each product in the product line. \\
+\hline
+{\em prod\+\_\+record} & -\/ Vector of type \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} which holds a record of each unit produced in the factory. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a3e89b0128a59423f99d22b0aa3e1a5da}\label{prototypes_8h_a3e89b0128a59423f99d22b0aa3e1a5da}} 
+\index{prototypes.h@{prototypes.h}!encrypt\_string@{encrypt\_string}}
+\index{encrypt\_string@{encrypt\_string}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{encrypt\_string()}{encrypt\_string()}}
+{\footnotesize\ttfamily std\+::string encrypt\+\_\+string (\begin{DoxyParamCaption}\item[{std\+::string}]{str }\end{DoxyParamCaption})}
+
+
+
+Encrypts user passwords combined with a pseudo-\/random long long. 
+
+This function shifts the A\+S\+C\+II value of each password character and operates on the password string which is prepended with a pseuo-\/random salt value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & -\/ String composed of salt and encrypted password. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Encrypted ciphertext is returned with prepended randomly generated salt which is then hashed. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a5bf66ced179755f0558f72e2756c25ff}\label{prototypes_8h_a5bf66ced179755f0558f72e2756c25ff}} 
+\index{prototypes.h@{prototypes.h}!find\_production\_number@{find\_production\_number}}
+\index{find\_production\_number@{find\_production\_number}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{find\_production\_number()}{find\_production\_number()}}
+{\footnotesize\ttfamily void find\+\_\+production\+\_\+number (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{struct_user}{User}} inputs a serial number and the respective production number is output. 
+
+If the production\+\_\+records vector is empty then the user is notified. Otherwise, the user is prompted to enter a serial number, which is then compared to the serial number substring of each element of the production\+\_\+records vector. If the element is found, then the production number is found by adding 1 to the index where it was found. If it is not found, then the user is notified and returned to the menu within run\+\_\+program.
+
+
+\begin{DoxyParams}{Parameters}
+{\em prod\+\_\+record} & -\/ Reference vector of type \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}}, which holds production number, product, and serial number. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a9a686a17fcb295e08254ff9cdfb3693b}\label{prototypes_8h_a9a686a17fcb295e08254ff9cdfb3693b}} 
+\index{prototypes.h@{prototypes.h}!load\_existing\_data@{load\_existing\_data}}
+\index{load\_existing\_data@{load\_existing\_data}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{load\_existing\_data()}{load\_existing\_data()}}
+{\footnotesize\ttfamily void load\+\_\+existing\+\_\+data (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&}]{,  }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \&}]{,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+The function loads existing data into the respective vectors if the files exists. 
+
+If the corresponding files exist, then the lines from catalog.\+txt are added to the products vector, and the lines from production.\+txt are added to the production\+\_\+records vector. The respective serial numbers are incremented depending on the substr containing the item\+\_\+type\+\_\+code.
+
+
+\begin{DoxyParams}{Parameters}
+{\em products} & -\/ Reference vector of type \mbox{\hyperlink{struct_product}{Product}}, which holds manufacturer, product name, item type code, product specs, and product\+\_\+info which concatenates all info together. \\
+\hline
+{\em prod\+\_\+record} & -\/ Reference vector of type \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}}, which holds production number, product, and serial number. \\
+\hline
+{\em stats} & -\/ Instance of type \mbox{\hyperlink{struct_statistics}{Statistics}}, which holds the next production number, and serial numbers for each type. \\
+\hline
+{\em users} & -\/ Reference vector of type \mbox{\hyperlink{struct_user}{User}}, which holds username, salt, password, and access level.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a225d3afbaf74f1afc5fb3885624c44e7}\label{prototypes_8h_a225d3afbaf74f1afc5fb3885624c44e7}} 
+\index{prototypes.h@{prototypes.h}!produce\_items@{produce\_items}}
+\index{produce\_items@{produce\_items}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{produce\_items()}{produce\_items()}}
+{\footnotesize\ttfamily void produce\+\_\+items (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&}]{,  }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Allows the user to track the production of each product within the catalog by writing to the production.\+txt file. 
+
+This function calls the show\+\_\+catalog function to prompt the user to enter the number corresponding to the product they wish to track. Then. the user is prompted to enter the number of units produced. Each item tracked is added to the production\+\_\+records vector and written to a file named production.\+txt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em products} & -\/ Reference vector of type \mbox{\hyperlink{struct_product}{Product}}, which holds manufacturer, product name, item type code, product specs, and product\+\_\+info which concatenates all info together. \\
+\hline
+{\em prod\+\_\+record} & -\/ Reference vector of type \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}}, which holds production number, product, and serial number. \\
+\hline
+{\em stats} & -\/ Instance of type \mbox{\hyperlink{struct_statistics}{Statistics}}, which holds the next production number, and serial numbers for each type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a9c585fcd97675b23653147e85df62632}\label{prototypes_8h_a9c585fcd97675b23653147e85df62632}} 
+\index{prototypes.h@{prototypes.h}!prompt\_menu\_choice@{prompt\_menu\_choice}}
+\index{prompt\_menu\_choice@{prompt\_menu\_choice}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{prompt\_menu\_choice()}{prompt\_menu\_choice()}}
+{\footnotesize\ttfamily bool prompt\+\_\+menu\+\_\+choice (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}} $>$ \&}]{,  }\item[{\mbox{\hyperlink{struct_statistics}{Statistics}} \&}]{,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_user}{User}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+This function prompts the user to enter a number to run a corresponding function from the menu printed to the screen. 
+
+This function is called within main, which returns either true or false then assigned to the flag bool, program\+\_\+is\+\_\+running. The function is called continuously within main until the user enters 6 which returns false and the loop is broken.
+
+
+\begin{DoxyParams}{Parameters}
+{\em products} & -\/ Reference vector of type \mbox{\hyperlink{struct_product}{Product}}, which holds manufacturer, product name, item type code, product specs, and product\+\_\+info which concatenates all info together. \\
+\hline
+{\em prod\+\_\+record} & -\/ Reference vector of type \mbox{\hyperlink{struct_production___record}{Production\+\_\+\+Record}}, which holds production number, product, and serial number. \\
+\hline
+{\em stats} & -\/ Instance of type \mbox{\hyperlink{struct_statistics}{Statistics}}, which holds the next production number, and serial numbers for each type. \\
+\hline
+{\em users} & -\/ Reference vector of type \mbox{\hyperlink{struct_user}{User}}, which holds username, salt, password, and access level. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True is returned if the entry is invalid or if a number other than 6 is entered. False is returned if the user enters 6 which exits the while loop within main and completes the program. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a9fc9383006a45a5a2072d478800e0cca}\label{prototypes_8h_a9fc9383006a45a5a2072d478800e0cca}} 
+\index{prototypes.h@{prototypes.h}!selection\_sort@{selection\_sort}}
+\index{selection\_sort@{selection\_sort}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{selection\_sort()}{selection\_sort()}}
+{\footnotesize\ttfamily void selection\+\_\+sort (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Sorts the products within the product line alphabetically by comparing the manufacturer strings. 
+
+This function uses a selection sort to put the products vector in ascending order (A -\/ z). This function is called after a new product is added.
+
+
+\begin{DoxyParams}{Parameters}
+{\em products} & -\/ A vector of type \mbox{\hyperlink{struct_product}{Product}} which holds the product line information. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prototypes_8h_a523861d4a6d7c8cdbbc6ba0d197ee561}\label{prototypes_8h_a523861d4a6d7c8cdbbc6ba0d197ee561}} 
+\index{prototypes.h@{prototypes.h}!show\_catalog@{show\_catalog}}
+\index{show\_catalog@{show\_catalog}!prototypes.h@{prototypes.h}}
+\subsubsection{\texorpdfstring{show\_catalog()}{show\_catalog()}}
+{\footnotesize\ttfamily void show\+\_\+catalog (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_product}{Product}} $>$ \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Prints the catalog to the console, and prints that the catalog is empty if no products have been added. 
+
+Uses a for loop to iterate through the products within the catalog if the vector is not empty, and print these elements to the console. It also prints out a number in front of each element to allow the user to choose a product within the function named produce\+\_\+items.
+
+
+\begin{DoxyParams}{Parameters}
+{\em products} & -\/ Reference vector of type \mbox{\hyperlink{struct_product}{Product}}, which holds manufacturer, product name, item type code, product specs, and product\+\_\+info which concatenates all info together. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
