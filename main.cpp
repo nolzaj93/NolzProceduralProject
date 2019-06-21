@@ -433,7 +433,7 @@ void add_employee_account(std::vector<User> &users) {
                 first_name_valid = true;
 
         } catch (std::exception &ex) {
-            //User is prompted with each
+            //User is prompted with each corresponding incorrect character.
             if (is_digit)
                 std::cout << "\nYou accidentally typed a number in your first name.\n";
             if (is_space)
@@ -445,7 +445,6 @@ void add_employee_account(std::vector<User> &users) {
 
         do {
             //Last name is not checked for digits so that users with duplicate user names can use digits.
-            //It is
             last_name_valid = false;
             is_space = false;
             is_not_alpha = false;
