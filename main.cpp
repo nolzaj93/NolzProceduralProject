@@ -519,17 +519,15 @@ void add_employee_account(std::vector<User> &users) {
         std::cout << "\nPlease enter a password between 8 and 20 characters long and at least one\n"
                      "digit, one lowercase letter, and one uppercase letter." << std::endl;
         std::getline(std::cin, pw_str);
-        char password[pw_str.length()];
 
-        strcpy(password, pw_str.c_str());
-
-        if (strlen(password) < 8 || strlen(password) > 20) {
+        int pwLength = pw_str.length();
+        if (pwLength < 8 || pwLength > 20) {
             std::cout << "The password length is not between 8 and 20 characters." << std::endl;
             continue;
         }
 
         //Checks character array for a digit, uppercase and lowercase letters.
-        for (char next_char : password) {
+        for (char next_char : pw_str) {
             if (!space_is_found && isspace(next_char))
                 space_is_found = true;
             else if (!special_is_found && !isalnum(next_char))
